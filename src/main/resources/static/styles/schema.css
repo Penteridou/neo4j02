@@ -1,0 +1,41 @@
+h1{
+  text-align: center;
+}
+.grid-container {
+    display: grid;
+    grid-gap: 50px 50px;
+    grid-template-columns: auto auto ;
+    background-color: #2196F3;
+    padding: 10px;
+  }
+  
+  .grid-item {
+    background-color: rgba(255, 255, 255, 0.8);
+    border: 1px solid rgba(0, 0, 0, 0.8);
+    padding: 20px;
+    font-size: 30px;
+    text-align: center;
+  }
+
+button{
+    display:inline-block;
+    padding:3em 3em;
+    border:0.16em solid rgba(78, 182, 156, 0.342);
+    margin:0 0.3em 0.3em 0;
+    box-sizing: border-box;
+    text-decoration:none;
+    text-transform:uppercase;
+    font-family:'Roboto',sans-serif;
+    font-weight:400;
+    color:rgba(57, 151, 206, 0.61);
+    text-align:center;
+    transition: all 0.15s;
+  }
+
+
+  button:hover{
+    color:rgb(81, 92, 153);
+border-color:rgb(165, 11, 11);
+
+
+  }

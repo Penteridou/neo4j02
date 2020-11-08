@@ -1,0 +1,41 @@
+<html>
+
+    <head>
+        <link rel="stylesheet" href="../styles/relationships.css">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+        <script src="../scripts/relationships.js"></script>
+    </head>
+
+    <body>
+
+        <h1>Graph Database Exploration</h1>
+        <p>Explore the database relationships </p>
+
+        <select id="relationshipsReturned" class="rel-container">
+
+        </select>
+
+        <div id="selectRelOption" >
+            <div class="grid-item">
+                <button  id="relProperties">explore relationship properties</button>
+            </div>
+            <div class="grid-item">
+                <button  id="relativeNodes">explore relative nodes</button>
+            </div>
+            <div class="grid-item">
+                <button  id="relCount">check relationship count</button>
+            </div>
+            <div class="grid-item">
+                <button  id="allTypeRel">check all relationships of this type </button>
+            </div>
+        </div>
+
+        <div id="result">
+
+        </div>
+
+        
+    </body>
+
+
+</html>

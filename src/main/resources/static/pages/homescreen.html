@@ -1,0 +1,78 @@
+<html>
+
+    <head>
+        <link rel="stylesheet" href="../styles/homescreen.css">
+        <link rel="stylesheet" href="../styles/nodes.css">
+
+<!--        graph visualization library-->
+        <script type="text/javascript" src="https://unpkg.com/default-passive-events"></script>
+        <script src="https://cdn.neo4jlabs.com/neovis.js/v1.3.0/neovis.js"></script>
+
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+
+        <script src="../scripts/homescreen.js"></script>
+        <script src="../scripts/nodes.js"></script>
+        <script src="../scripts/relationships.js"></script>
+        <script src="../scripts/properties.js"></script>
+        <script src="../scripts/schema.js"></script>
+<!--        <script src="../scripts/main.js"></script>-->
+    </head>
+    <body>
+        <h1>Graph Database Exploration</h1>
+        <button id="refresh" value="refresh">clear</button>
+        <button id="draw" value="visualization">visualization</button>
+        <button id="import" value="import">import</button>
+        <p>Explore the database step by step </p>
+
+        <div class="grid-container">
+
+            <div class="grid-item">
+                <!-- The search input -->
+                <div id="target"  >
+                    <input id="keywordinput" type="text" placeholder="Search.." name="search">
+                    <button id="btn" value="search">Go!</button>
+                </div>
+            </div>
+
+            <div class="grid-item">
+                <label> or get started with: </label>
+                <select id="mainList" class="prop-container">
+                    <option value="none" selected disabled hidden>Choose category</option>
+                    <option value="shownodes" id="nodesOption"> nodes </option>
+                    <option value="showrelationshiptypes" id="relOption"> relationships</option>
+                    <option value="showproperties" id="propOption"> properties </option>
+                </select>
+            </div>
+        </div>
+
+      <div class="grid-container box2 ">
+          <div class="grid-item">
+              <div id="result">
+                  <!--                <select id="listReturned" class="prop-container">-->
+                  <!--                </select>-->
+              </div>
+          </div>
+          <div class="grid-item">
+              <div id="result2">
+
+              </div>
+          </div>
+      </div>
+
+        <div id="result3">
+
+        </div>
+        <div id="theTable">
+
+        </div>
+        <div id="theTable2">
+
+        </div>
+
+        <div id="viz">
+        </div>
+
+    </body>
+
+
+</html>
