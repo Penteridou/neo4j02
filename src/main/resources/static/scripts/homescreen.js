@@ -75,25 +75,29 @@ $(document).ready(function(){
         localStorage.setItem("currentProperty", '');
 
         if (keyword==''){
-                alert("Please insert any keyword!")
+                alert("Please insert any keyword to proceed")
          }else if(wordsCounter==1) {
             searchWithOneKeyword(keyword);             //call the corresponding function
-        } else (wordsCounter==2){                     //call the function for MORE KEYWORDS INSERTED   <
+        } else {                     //call the function for MORE KEYWORDS INSERTED   <
                  var counter = 0;
                 console.log("more than one keywords inserted: ", wordsCounter, keyword)
                var keywordsArray = keywordsToArray(keyword);
                var keywordTypesArray=[];
+               var keywordMap= new Map();
 
                $.each(keywordsArray, function setType( index, value  ) {
                 counter++;
                    console.log("keywordsArray[index]?",keywordsArray[index],index);
                    if( checkIfKeywordIsACategory(keywordsArray[index])){                                                //if keyword is category
                          if(defineKeywordCategory(keywordsArray[index])=="showproperties"){
+                            keywordMap.set( keywordTypesArray[index],'properties')
                             keywordTypesArray[index]="properties";
                          }else if(defineKeywordCategory(keywordsArray[index])=="showrelationshiptypes"){
                             keywordTypesArray[index]="relTypes";
+                            keywordMap.set( keywordTypesArray[index],'relTypes')
                          }else if(defineKeywordCategory(keywordsArray[index])=="shownodes"){
                             keywordTypesArray[index]="nodes";
+                            keywordMap.set( keywordTypesArray[index],'nodes')
                          }
 
 
@@ -107,6 +111,7 @@ $(document).ready(function(){
                                     success: function(data){
                                         console.log("does it work????-->", data);
                                         keywordTypesArray[index]=data;
+                                        keywordMap.set(keywordTypesArray[index], data);
                                         console.log("keywordTypesArray[index] took any value?",keywordTypesArray[index] );
 
                                     }
@@ -117,6 +122,7 @@ $(document).ready(function(){
 
                $(document).ajaxStop(function () {
                        console.log("type array with delay???: ", keywordTypesArray );
+                       console.log("keyword map: ", keywordMap );
                        if(counter==2){
                          //   alert("counter ", counter)
                             keywordHandling(keywordTypesArray, keywordsArray); //call the corresponding function to handle the keywords
