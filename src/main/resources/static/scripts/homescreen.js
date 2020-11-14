@@ -75,12 +75,13 @@ $(document).ready(function(){
         localStorage.setItem("currentProperty", '');
 
         if (keyword==''){
-                alert("Please insert any keyword!")
+                alert("Please insert any keyword!!!!!!")
          }else if(wordsCounter==1) {
             searchWithOneKeyword(keyword);             //call the corresponding function
-        } else if(wordsCounter==2) {                     //call the function for MORE KEYWORDS INSERTED   <
+        } else {                     //call the function for MORE KEYWORDS INSERTED   <
                  var counter = 0;
                 console.log("more than one keywords inserted: ", wordsCounter, keyword)
+                var keywordsMap = new Map();
                var keywordsArray = keywordsToArray(keyword);
                var keywordTypesArray=[];
 
@@ -89,10 +90,13 @@ $(document).ready(function(){
                    console.log("keywordsArray[index]?",keywordsArray[index],index);
                    if( checkIfKeywordIsACategory(keywordsArray[index])){                                                //if keyword is category
                          if(defineKeywordCategory(keywordsArray[index])=="showproperties"){
+                            keywordsMap.set((keywordsArray[index]),"properties")
                             keywordTypesArray[index]="properties";
                          }else if(defineKeywordCategory(keywordsArray[index])=="showrelationshiptypes"){
+                            keywordsMap.set((keywordsArray[index]),"relTypes")
                             keywordTypesArray[index]="relTypes";
                          }else if(defineKeywordCategory(keywordsArray[index])=="shownodes"){
+                            keywordsMap.set((keywordsArray[index]),"nodes")
                             keywordTypesArray[index]="nodes";
                          }
 
@@ -106,8 +110,10 @@ $(document).ready(function(){
                                     contentType:"application/json",
                                     success: function(data){
                                         console.log("does it work????-->", data);
+                                        keywordsMap.set((keywordsArray[index]),data);
                                         keywordTypesArray[index]=data;
                                         console.log("keywordTypesArray[index] took any value?",keywordTypesArray[index] );
+
                                     }
                                 });
                     }
@@ -116,6 +122,7 @@ $(document).ready(function(){
 
                $(document).ajaxStop(function () {
                        console.log("type array with delay???: ", keywordTypesArray );
+                       console.log("keywordsMap ?",keywordsMap );
                        if(counter==2){
                          //   alert("counter ", counter)
                             keywordHandling(keywordTypesArray, keywordsArray); //call the corresponding function to handle the keywords

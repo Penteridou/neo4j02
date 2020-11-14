@@ -34,7 +34,7 @@ public class ObjectRecognitionService extends GenericService<Object> {
             System.out.println("the keyword is property");
         Map<String,Object> params = new HashMap<>();
         params.put( "props",getAllPropertiesListed()); // current properties
-        String query = "unwind {props} as prop\n" +
+        String query = "unwind $props as prop\n" +
                 "MATCH (n) WHERE prop  =~ '(?i).*"+keywordInserted+".*' \n" +
                 "RETURN  distinct prop as showproperties";
         return Neo4jSessionFactory.getInstance().getNeo4jSession().query(query, params);
