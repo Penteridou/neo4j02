@@ -75,7 +75,7 @@ $(document).ready(function(){
         localStorage.setItem("currentProperty", '');
 
         if (keyword==''){
-                alert("Please insert any keyword to proceed")
+                alert("Please insert any keyword to proceed :))")
          }else if(wordsCounter==1) {
             searchWithOneKeyword(keyword);             //call the corresponding function
         } else {                     //call the function for MORE KEYWORDS INSERTED   <
@@ -83,21 +83,22 @@ $(document).ready(function(){
                 console.log("more than one keywords inserted: ", wordsCounter, keyword)
                var keywordsArray = keywordsToArray(keyword);
                var keywordTypesArray=[];
-               var keywordMap= new Map();
+               var keywordMap= new Map(); //value, type
 
                $.each(keywordsArray, function setType( index, value  ) {
                 counter++;
                    console.log("keywordsArray[index]?",keywordsArray[index],index);
                    if( checkIfKeywordIsACategory(keywordsArray[index])){                                                //if keyword is category
                          if(defineKeywordCategory(keywordsArray[index])=="showproperties"){
-                            keywordMap.set( keywordTypesArray[index],'properties')
-                            keywordTypesArray[index]="properties";
+                            keywordMap.set( keywordsArray[index],'properties')
+                            keywordsArray[index]="properties";
                          }else if(defineKeywordCategory(keywordsArray[index])=="showrelationshiptypes"){
-                            keywordTypesArray[index]="relTypes";
                             keywordMap.set( keywordTypesArray[index],'relTypes')
+                            keywordsArray[index]="relTypes";
                          }else if(defineKeywordCategory(keywordsArray[index])=="shownodes"){
-                            keywordTypesArray[index]="nodes";
-                            keywordMap.set( keywordTypesArray[index],'nodes')
+                            keywordMap.set( keywordsArray[index],'nodes')
+                            keywordsArray[index]="nodes";
+
                          }
 
 
@@ -110,8 +111,8 @@ $(document).ready(function(){
                                     contentType:"application/json",
                                     success: function(data){
                                         console.log("does it work????-->", data);
+                                        keywordMap.set(keywordsArray[index], data);
                                         keywordTypesArray[index]=data;
-                                        keywordMap.set(keywordTypesArray[index], data);
                                         console.log("keywordTypesArray[index] took any value?",keywordTypesArray[index] );
 
                                     }
@@ -125,6 +126,7 @@ $(document).ready(function(){
                        console.log("keyword map: ", keywordMap );
                        if(counter==2){
                          //   alert("counter ", counter)
+                         keywordMapHandling(keywordMap);
                             keywordHandling(keywordTypesArray, keywordsArray); //call the corresponding function to handle the keywords
                             counter=0;
                       }
@@ -342,7 +344,15 @@ function keywordHandling(arrayTypes,arrayValues){
 
 }
 
+function keywordMapHandling(keywordMap){
+ console.log("inside the Map handling: ", keywordMap);
 
+ for (const [key, value] of keywordMap.entries()) {
+   console.log('key, value: ');
+   console.log(key, value);
+ }
+
+}
 
 //words count in input #keywordinput
 function countWords(keyword){
