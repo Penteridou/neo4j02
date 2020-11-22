@@ -87,7 +87,7 @@ $(document).ready(function(){
 
                $.each(keywordsArray, function setType( index, value  ) {
                 counter++;
-                   console.log("keywordsArray[index]?",keywordsArray[index],index);
+                  // console.log("keywordsArray[index]?",keywordsArray[index],index);
                    if( checkIfKeywordIsACategory(keywordsArray[index])){                                                //if keyword is category
                          if(defineKeywordCategory(keywordsArray[index])=="showproperties"){
                             keywordMap.set( keywordsArray[index],'properties')
@@ -110,10 +110,10 @@ $(document).ready(function(){
                                     dataType : "text",
                                     contentType:"application/json",
                                     success: function(data){
-                                        console.log("does it work????-->", data);
+                                       // console.log("does it work????-->", data);
                                         keywordMap.set(keywordsArray[index], data);
                                         keywordTypesArray[index]=data;
-                                        console.log("keywordTypesArray[index] took any value?",keywordTypesArray[index] );
+                                       // console.log("keywordTypesArray[index] took any value?",keywordTypesArray[index] );
 
                                     }
                                 });
@@ -122,13 +122,13 @@ $(document).ready(function(){
                });
 
                $(document).ajaxStop(function () {
-                       console.log("type array with delay???: ", keywordTypesArray );
+                       //console.log("type array with delay???: ", keywordTypesArray );
                        console.log("keyword map: ", keywordMap );
-                       if(counter==2){
+                       if(counter>=2){
                          //   alert("counter ", counter)
                          keywordMapHandling(keywordMap);
-                            keywordHandling(keywordTypesArray, keywordsArray); //call the corresponding function to handle the keywords
-                            counter=0;
+                        // keywordHandling(keywordTypesArray, keywordsArray); //call the corresponding function to handle the keywords
+                         counter=0;
                       }
                });
           }
@@ -292,7 +292,7 @@ function keywordHandling(arrayTypes,arrayValues){
                         $(propTable).appendTo($( "<div style='overflow-x:auto'>Table</div>" ).insertAfter( ".box2" ));
                       }
                   });
-    }else if( (arrayTypes[0]=="shownodes")&&(arrayTypes[1]=="showrelationshiptypes")   ){ //ex. Book WRITED
+    }else if( (arrayTypes[0]=="shownodes")&&(arrayTypes[1]=="showrelationshiptypes")   ){ //ex. Book WROTE
        var rel = arrayValues[1];
          ajaxForNodesRel(rel);
     }else if( (arrayTypes[0]=="shownodes")&&(arrayTypes[1]=="shownodes")   ){ //ex. Book Author
@@ -346,13 +346,130 @@ function keywordHandling(arrayTypes,arrayValues){
 
 function keywordMapHandling(keywordMap){
  console.log("inside the Map handling: ", keywordMap);
+ //create flag objects for any keyword case {exists, keys array, counter}
+var nodeFlag= {found:false,key: [],counter:0};
+var propFlag= {found:false,key: [],counter:0};
+var relFlag= {found:false,key: [],counter:0};
+var otherFlag= {found:false,key: [],counter:0};
+var allNodesFlag = {found:false,key: [],counter:0};
+var allPropFlag= {found:false,key: [],counter:0};
+var allRelFlag = {found:false,key: [],counter:0};
 
- for (const [key, value] of keywordMap.entries()) {
-   console.log('key, value: ');
-   console.log(key, value);
- }
+console.log('size ',keywordMap.size);
 
-}
+     for (const [key, value] of keywordMap.entries()) {
+    //   console.log('key, value: ');
+    //   console.log(key, value);
+       if (value=='shownodes'){
+                nodeFlag.found=true;
+                nodeFlag.key[nodeFlag.counter]=key;
+                nodeFlag.counter++;
+                console.log('SUCCESS: ', nodeFlag);
+
+       }else if(value=="showproperties"){
+            propFlag.found=true;
+            propFlag.key[propFlag.counter]=key;
+            propFlag.counter++;
+
+        }else if(value=="showrelationshiptypes"){
+            relFlag.found=true;
+            relFlag.key[relFlag.counter]=key;
+            relFlag.counter++;
+
+        }else if(value=="nodes"){
+             allNodesFlag.found=true;
+             allNodesFlag.key[allNodesFlag.counter]=key;
+             allNodesFlag.counter++;
+
+        }else if(value=="properties"){
+              allPropFlag.found=true;
+              allPropFlag.key[allPropFlag.counter]=key;
+              allPropFlag.counter++;
+
+        }else if(value=="relTypes"){
+               allRelFlag.found=true;
+               allRelFlag.key[allRelFlag.counter]=key;
+               allRelFlag.counter++;
+
+        }else{
+            otherFlag.found=true;
+            otherFlag.key[otherFlag.counter]=key;
+            otherFlag.counter++;
+        }//add categories
+     }
+     //
+   // if (keywordMap.size==2){
+        if(nodeFlag.found==true&&nodeFlag.counter==2){
+             console.log('2 nodes case')
+             AjaxTwoNodesSearchCase(nodeFlag.key[0],nodeFlag.key[1]);
+
+        }else if(nodeFlag.found==true&&propFlag.found==true){
+              console.log('node&prop case');
+              AjaxNodeAndPropSearchCase(nodeFlag.key[0] , propFlag.key[0]);
+
+        }else if(nodeFlag.found==true&&otherFlag.found==true){
+                console.log('node&other case')
+                    $.ajax({
+                          type: 'GET',
+                          url: 'http://localhost:8080/search/' + otherFlag.key[0],
+                          dataType : "json",
+                          contentType:"application/json",
+                          success: function(data){
+                              console.log(data);
+                              var items = [];
+                              var table = $('<table>').addClass('resultTable');
+                               $.each( data, function( key, val ) { //check the value title from the query result to figure out what it is , example: ("shownodes":"Book")
+                                  var value = JSON.stringify(val);// .replace("value", "").replace(/[&\/\\#,+()$~%.'":*?<>{}]/g, '');
+                                  console.log("the initial value is: "+value);
+                                  var resultType = value.split(/"(.+)/)[1].split(/"(.+)/)[0]; //resultType value: shownodes||showproperties||showrelationshiptypes||NodeLabel
+                                  //check result type in order to proceed
+                                  console.log("result type is: "+resultType);
+                                  if(resultType=="NodeLabel") { // the keyword is a property value (NodeValue is returned when the property value query runs)
+                                    console.log("NodeLabel details ")
+                                        var items = [];
+                                        var value = JSON.stringify(val).replace("info\":", "").replace(/[&\/\\#+()$~%'"*?<>{}]/g, '');
+                                        var arr = value.split(',');
+                                        console.log("check json: ", arr);
+                                        for (let i = 0; i < arr.length; ++i) {
+                                             if(!arr[i].endsWith("null")){
+                                                items.push( "<td>" + arr[i] + "</td>" );
+                                             }
+                                        }
+                                       // var btn= $( "<button>check relationships</button>").addClass("checkRelBtn").attr("id",val.value.id);
+                                        var row = $('<tr>').addClass('bar').append(items.join("")); //.append(btn);
+                                        //console.log("btn id is:", val.value.id);
+                                        table.append(row);
+
+                                  }else{
+                                        //here
+                                    $("<button>" + value.split(/"(.+)/)[1].split(/"(.+)/)[1].split(/"(.+)/)[1].split(/"(.+)/)[0]+ " </button>" ).addClass(resultType).appendTo( $("#result"));
+                                   }
+
+                                 if(resultType=="NodeLabel"){
+                                 $(table).appendTo($( "<div style='overflow-x:auto'>Table</div>" ).insertAfter( ".box2" ));
+                                 }else{ table = undefined;  console.log("table deleted");}
+
+                              });
+                          } //success function ok
+                    });
+        }else if(nodeFlag.found==true&&relFlag.found==true){
+                console.log('node&rel case')
+                ajaxForNodesRel(relFlag.key[0]);
+        }else if( (nodeFlag.found==true&&allNodesFlag.found==true)   ){ //Book nodes
+                 ajaxAllnodesOf(nodeFlag.key[0]);
+                 console.log("all nodes of node case");
+         }else if( nodeFlag.found==true&&allPropFlag.found==true  ){ //Book properties
+              ajaxAllpropertiesOf(nodeFlag.key[0]);
+              console.log("all prop of node case");
+         }else if( nodeFlag.found==true&&allRelFlag.found==true ){ //Book relationships
+              ajaxAllrelTypesOf(nodeFlag.key[0]);
+              console.log("all rel of node case");
+         }else {
+                console.log('add more cases')
+        }
+   // } //else if: 3 words case
+
+}//function ends
 
 //words count in input #keywordinput
 function countWords(keyword){
@@ -366,5 +483,66 @@ function keywordsToArray(keyword){
     }
     console.log("words are: ", wordsArr);
     return wordsArr;
+}
+
+//ajax calls function for search input
+function AjaxTwoNodesSearchCase(node1,node2){
+ $.ajax({
+              type: 'GET',
+              url: 'http://localhost:8080/relationships/' + node1+ '/'+ node2 ,
+              dataType : "json",
+              contentType:"application/json",
+              success: function(data){
+                var table = $('<table>').addClass('resultTable');
+                $.each( data, function( key, val ) {
+                    //console.log("stringify:",JSON.stringify(val)); //.replace("{\"value\":", "").replace(/\}}/g, "}"));
+                   // console.log("name",val.value.name);
+                    var items = [];
+                    var value = JSON.stringify(val).replace("type(r)\":", "").replace(/[&\/\\#+()$~%'"*?<>{}]/g, '');
+                    var arr = value.split(',');
+                    console.log("check json: ", arr);
+                    for (let i = 0; i < arr.length; ++i) {
+                        //  alert(arr[i]);
+                        items.push( "<td>" + arr[i] + "</td>" );
+                    }
+
+                    var row = $('<tr>').addClass('bar').append(items.join(""));
+                    //console.log("btn id is:", val.value.id);
+                    table.append(row);
+                    //  items.push( "<label>next-----------</label>" );
+
+                });
+                $(table).appendTo($('#theTable2'));//.attr("id",'theTable').insertAfter( ".box2" ));
+
+              }
+          });
+}
+
+function AjaxNodeAndPropSearchCase(node, prop){
+                $.ajax({
+                      type: 'GET',
+                      url: 'http://localhost:8080/property/propertyOfnode/'+ node +'/' +prop,
+                      dataType : "json",
+                      contentType:"application/json",
+                      success: function(data){
+                        var propTable = $('<table>').addClass('propTable');
+                        $.each( data, function( key, val ) {
+                            //console.log("stringify:",JSON.stringify(val)); //.replace("{\"value\":", "").replace(/\}}/g, "}"));
+                      //      console.log("name",val.value);
+                            var items = [];
+                            var value = JSON.stringify(val).replace("value\":", "").replace(/[&\/\\#+()$~%'"*?<>{}]/g, '');
+                            console.log("check json: ", value);
+                                items.push( "<td>" + value + "</td>" );
+                           // var btn= $( "<button>check relationships</button>").addClass("checkRelBtn").attr("id",val.value.id);
+                            var row = $('<tr>').addClass('bar').append(items.join("")); //.append(btn);
+                            //console.log("btn id is:", val.value.id);
+                            propTable.append(row);
+                            //  items.push( "<label>next-----------</label>" );
+
+                        });
+                        $(".box2").empty();
+                        $(propTable).appendTo($( "<div style='overflow-x:auto'>Table</div>" ).insertAfter( ".box2" ));
+                      }
+                  });
 }
 
