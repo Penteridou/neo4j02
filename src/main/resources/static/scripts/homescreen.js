@@ -398,7 +398,35 @@ console.log('size ',keywordMap.size);
      }
      //
    // if (keywordMap.size==2){
-        if(nodeFlag.found==true&&nodeFlag.counter==2){              //ex. Book Author
+        if( (nodeFlag.found==true&&otherFlag.found==true&&propFlag.found==true) ){ //ex. Book title Potter
+                             console.log(" node's prop equals to a value");
+                              $.ajax({
+                                                   type: 'GET',
+                                                   url: 'http://localhost:8080/property/propertyOfnode/'+ nodeFlag.key[0] +'/' +propFlag.key[0] +'/' +otherFlag.key[0],
+                                                   dataType : "json",
+                                                   contentType:"application/json",
+                                                   success: function(data){
+                                                     var propTable = $('<table>').addClass('propTable');
+                                                     $.each( data, function( key, val ) {
+                                                         //console.log("stringify:",JSON.stringify(val)); //.replace("{\"value\":", "").replace(/\}}/g, "}"));
+                                                   //      console.log("name",val.value);
+                                                         var items = [];
+                                                         var value = JSON.stringify(val).replace("value\":", "").replace(/[&\/\\#+()$~%'"*?<>{}]/g, '');
+                                                         console.log("check json: ", value);
+                                                             items.push( "<td>" + value + "</td>" );
+                                                        // var btn= $( "<button>check relationships</button>").addClass("checkRelBtn").attr("id",val.value.id);
+                                                         var row = $('<tr>').addClass('bar').append(items.join("")); //.append(btn);
+                                                         //console.log("btn id is:", val.value.id);
+                                                         propTable.append(row);
+                                                         //  items.push( "<label>next-----------</label>" );
+
+                                                     });
+                                                     $(".box2").empty();
+                                                     $(propTable).appendTo($( "<div style='overflow-x:auto'>Table</div>" ).insertAfter( ".box2" ));
+                                                   }
+                                               });
+
+        }else if(nodeFlag.found==true&&nodeFlag.counter==2){              //ex. Book Author
              console.log('2 nodes case')
              AjaxTwoNodesSearchCase(nodeFlag.key[0],nodeFlag.key[1]);
 
@@ -454,12 +482,7 @@ console.log('size ',keywordMap.size);
                               });
                           } //success function ok
                     });
-        }else if( (nodeFlag.found==true&&otherFlag.found==true&&propFlag.found==true) ){ //ex. Book title (=) Potter
-                          console.log(" node's prop equals to a value");
-
-                          // [...]
-
-        }else if( (nodeFlag.found==true&&allNodesFlag.found==true) ){ //Book nodes
+         }else if( (nodeFlag.found==true&&allNodesFlag.found==true) ){ //Book nodes
                  ajaxAllnodesOf(nodeFlag.key[0]);
                  console.log("all nodes of node case");
          }else if( nodeFlag.found==true&&allPropFlag.found==true  ){ //Book properties
@@ -469,8 +492,8 @@ console.log('size ',keywordMap.size);
               ajaxAllrelTypesOf(nodeFlag.key[0]);
               console.log("all rel of node case");
          }else {
-                console.log('add more cases')
-        }
+                console.log('add more cases');
+         }
    // } //else if: 3 words case
 
 }//function ends

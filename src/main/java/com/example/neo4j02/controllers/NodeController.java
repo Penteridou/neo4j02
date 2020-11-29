@@ -174,6 +174,8 @@ public class NodeController<T> { // GenericController
     @GetMapping("/property/propertyOfnode/{node}/{prop}")
     public Object getPropOfNode(@PathVariable String prop,@PathVariable String node){return  nodeService.getPropOfNode(node,prop); }
 
+    @GetMapping("/property/propertyOfnode/{node}/{prop}/{value}")
+    public Object getPropOfNode(@PathVariable String prop,@PathVariable String node,@PathVariable String value){return  nodeService.getPropOfNode(node,prop,value); }
 
 }
 
