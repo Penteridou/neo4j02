@@ -62,7 +62,7 @@ $(document).ready(function(){
 
 
 //SEARCH BUTTON---------------------------------------------------------------------------------------------------------
-// GIA AUTOCOMPLETE CHECK https://www.w3schools.com/howto/howto_js_autocomplete.asp !!!!!!!!!!!!!!
+// GIA AUTOCOMPLETE CHECK https://www.w3schools.com/howto/howto_js_autocomplete.asp
 $(document).ready(function(){
    $("#btn").click(function(){
         var keyword = $("#keywordinput").val();
@@ -110,7 +110,6 @@ $(document).ready(function(){
                                     dataType : "text",
                                     contentType:"application/json",
                                     success: function(data){
-                                       // console.log("does it work????-->", data);
                                         keywordMap.set(keywordsArray[index], data);
                                         keywordTypesArray[index]=data;
                                        // console.log("keywordTypesArray[index] took any value?",keywordTypesArray[index] );
@@ -399,15 +398,18 @@ console.log('size ',keywordMap.size);
      }
      //
    // if (keywordMap.size==2){
-        if(nodeFlag.found==true&&nodeFlag.counter==2){
+        if(nodeFlag.found==true&&nodeFlag.counter==2){              //ex. Book Author
              console.log('2 nodes case')
              AjaxTwoNodesSearchCase(nodeFlag.key[0],nodeFlag.key[1]);
 
-        }else if(nodeFlag.found==true&&propFlag.found==true){
+        }else if(nodeFlag.found==true&&propFlag.found==true){       //ex. Book price
               console.log('node&prop case');
               AjaxNodeAndPropSearchCase(nodeFlag.key[0] , propFlag.key[0]);
 
-        }else if(nodeFlag.found==true&&otherFlag.found==true){
+        }else if(nodeFlag.found==true&&relFlag.found==true){        //ex. Book WROTE
+                         console.log('node&rel case')
+                         ajaxForNodesRel(relFlag.key[0]);
+        }else if(nodeFlag.found==true&&otherFlag.found==true){      //ex. Book Potter
                 console.log('node&other case')
                     $.ajax({
                           type: 'GET',
@@ -452,10 +454,12 @@ console.log('size ',keywordMap.size);
                               });
                           } //success function ok
                     });
-        }else if(nodeFlag.found==true&&relFlag.found==true){
-                console.log('node&rel case')
-                ajaxForNodesRel(relFlag.key[0]);
-        }else if( (nodeFlag.found==true&&allNodesFlag.found==true)   ){ //Book nodes
+        }else if( (nodeFlag.found==true&&otherFlag.found==true&&propFlag.found==true) ){ //ex. Book title (=) Potter
+                          console.log(" node's prop equals to a value");
+
+                          // [...]
+
+        }else if( (nodeFlag.found==true&&allNodesFlag.found==true) ){ //Book nodes
                  ajaxAllnodesOf(nodeFlag.key[0]);
                  console.log("all nodes of node case");
          }else if( nodeFlag.found==true&&allPropFlag.found==true  ){ //Book properties
@@ -470,6 +474,8 @@ console.log('size ',keywordMap.size);
    // } //else if: 3 words case
 
 }//function ends
+
+
 
 //words count in input #keywordinput
 function countWords(keyword){
