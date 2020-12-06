@@ -111,7 +111,7 @@ $(document).ready(function(){
                                     contentType:"application/json",
                                     success: function(data){
                                         keywordMap.set(keywordsArray[index], data);
-                                        keywordTypesArray[index]=data;
+                                       // keywordTypesArray[index]=data;
                                        // console.log("keywordTypesArray[index] took any value?",keywordTypesArray[index] );
 
                                     }
@@ -261,6 +261,7 @@ function keywordIsACategory(keyword){
             });
 }
 
+//no use
 function keywordHandling(arrayTypes,arrayValues){
     console.log("inside the handling: ", arrayTypes, arrayValues);
     if( (arrayTypes[0]=="shownodes")&&(arrayTypes[1]=="showproperties")  ){ //ex. Book price
@@ -401,30 +402,42 @@ console.log('size ',keywordMap.size);
         if( (nodeFlag.found==true&&otherFlag.found==true&&propFlag.found==true) ){ //ex. Book title Potter
                              console.log(" node's prop equals to a value");
                               $.ajax({
-                                                   type: 'GET',
-                                                   url: 'http://localhost:8080/property/propertyOfnode/'+ nodeFlag.key[0] +'/' +propFlag.key[0] +'/' +otherFlag.key[0],
-                                                   dataType : "json",
-                                                   contentType:"application/json",
-                                                   success: function(data){
-                                                     var propTable = $('<table>').addClass('propTable');
-                                                     $.each( data, function( key, val ) {
-                                                         //console.log("stringify:",JSON.stringify(val)); //.replace("{\"value\":", "").replace(/\}}/g, "}"));
-                                                   //      console.log("name",val.value);
-                                                         var items = [];
-                                                         var value = JSON.stringify(val).replace("value\":", "").replace(/[&\/\\#+()$~%'"*?<>{}]/g, '');
-                                                         console.log("check json: ", value);
-                                                             items.push( "<td>" + value + "</td>" );
-                                                        // var btn= $( "<button>check relationships</button>").addClass("checkRelBtn").attr("id",val.value.id);
-                                                         var row = $('<tr>').addClass('bar').append(items.join("")); //.append(btn);
-                                                         //console.log("btn id is:", val.value.id);
-                                                         propTable.append(row);
-                                                         //  items.push( "<label>next-----------</label>" );
+                                       type: 'GET',
+                                       url: 'http://localhost:8080/property/propertyOfnode/'+ nodeFlag.key[0] +'/' +propFlag.key[0] +'/' +otherFlag.key[0],
+                                       dataType : "json",
+                                       contentType:"application/json",
+                                       success: function(data){
 
-                                                     });
-                                                     $(".box2").empty();
-                                                     $(propTable).appendTo($( "<div style='overflow-x:auto'>Table</div>" ).insertAfter( ".box2" ));
-                                                   }
-                                               });
+
+                                                  console.log(data);
+                                                  var items = [];
+                                                  var table = $('<table>').addClass('resultTable');
+                                                   $.each( data, function( key, val ) { //check the value title from the query result to figure out what it is , example: ("shownodes":"Book")
+                                                      var value = JSON.stringify(val);// .replace("value", "").replace(/[&\/\\#,+()$~%.'":*?<>{}]/g, '');
+                                                      console.log("the initial value is: "+value);
+
+                                                            var items = [];
+                                                            var value = JSON.stringify(val).replace("info\":", "").replace(/[&\/\\#+()$~%'"*?<>{}]/g, '');
+                                                            var arr = value.split(',');
+                                                            console.log("check json: ", arr);
+                                                            for (let i = 0; i < arr.length; ++i) {
+                                                                 if(!arr[i].endsWith("null")){
+                                                                    items.push( "<td>" + arr[i] + "</td>" );
+                                                                 }
+                                                            }
+                                                           // var btn= $( "<button>check relationships</button>").addClass("checkRelBtn").attr("id",val.value.id);
+                                                            var row = $('<tr>').addClass('bar').append(items.join("")); //.append(btn);
+                                                            //console.log("btn id is:", val.value.id);
+                                                            table.append(row);
+
+                                                     $(table).appendTo($( "<div style='overflow-x:auto'>Table</div>" ).insertAfter( ".box2" ));
+
+
+                                                  });
+
+
+                                       }
+                                   });
 
         }else if(nodeFlag.found==true&&nodeFlag.counter==2){              //ex. Book Author
              console.log('2 nodes case')
@@ -491,8 +504,11 @@ console.log('size ',keywordMap.size);
          }else if( nodeFlag.found==true&&allRelFlag.found==true ){ //Book relationships
               ajaxAllrelTypesOf(nodeFlag.key[0]);
               console.log("all rel of node case");
+         }else if(otherFlag.found==true&&otherFlag.counter==2){
+              console.log('two values case');
+
          }else {
-                console.log('add more cases');
+              console.log('add more cases');
          }
    // } //else if: 3 words case
 

@@ -75,6 +75,9 @@ public class NodeController<T> { // GenericController
     public Object getObject(@PathVariable String keyword) {
         return objectRecognitionService.setParamsAndSearch(keyword); }
 
+    @GetMapping("/search/{keyword}/{keyword2}")
+    public Object getObject(@PathVariable String keyword, @PathVariable String keyword2) {
+        return objectRecognitionService.setParamsAndSearch(keyword,keyword2); }
 
     //the node TYPE  that includes the keyword
     @GetMapping(value = "/searchfortype/{keyword}") //,produces = MediaType.APPLICATION_JSON_VALUE

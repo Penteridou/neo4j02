@@ -157,9 +157,8 @@ public class NodeService extends GenericService<Object> {
     public Result getPropOfNode(String node, String prop,String value){
         System.out.println("value of property of a node: "+prop+" "+node+" "+value);
         Map<String,Object> params = new HashMap<>();
-        String query="MATCH (n:Book)\n" +
-                "MATCH (n:"+node+")  WHERE n."+prop+"  =~ '(?i).*"+value+".*'\n" +
-                "return n."+prop+" as value";
+        String query="MATCH (n:"+node+")  WHERE n."+prop+"  =~ '(?i).*"+value+".*'\n" +
+                "return n as info";
         return Neo4jSessionFactory.getInstance().getNeo4jSession().query(query,params);
     }
 

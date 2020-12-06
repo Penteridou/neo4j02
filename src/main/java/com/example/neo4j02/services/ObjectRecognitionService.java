@@ -77,6 +77,22 @@ public class ObjectRecognitionService extends GenericService<Object> {
 
     }
 
+    public Result setParamsAndSearch(String keywordInserted1,String keywordInserted2){
+        System.out.println("the keyword is property value");
+        Map<String,Object> params = new HashMap<>();
+        params.put("props",getAllPropertiesListed()); // current properties
+        String query =
+                "MATCH (n) \n" +
+                        "unwind keys(n) as prop\n" +
+                        "MATCH (n) WHERE n[prop]  =~ '(?i).*"+keywordInserted1+".*'\n" +
+                        "MATCH (m) WHERE m[prop]  =~ '(?i).*"+keywordInserted2+".*'\n" +
+                        "MATCH (n)-[r]-(m) RETURN distinct type(r) as value";
+                       // else return both (OR) "RETURN labels(n) as NodeLabel, n as info";
+        return Neo4jSessionFactory.getInstance().getNeo4jSession().query(query, params);
+
+
+    }
+
     //--------------------------------------------------------------------------------------------------------------------------
 
     //get keyword type OK
