@@ -156,7 +156,8 @@ public class NodeController<T> { // GenericController
 
     //return rel between two nodes
     @GetMapping("/relationships/{node1}/{node2}")
-    public Object getTwoNodesRel(@PathVariable String node1, @PathVariable String node2){return nodeService.getTwoNodesRel(node1,node2); }
+    public Object getTwoNodesRel(@PathVariable String node1, @PathVariable String node2){return nodeService.getTwoNodesRel(node1,node2);
+    }
 
     //-------------------- EXPLORE PROPERTIES----------------------------------------------------------------------------------------
 

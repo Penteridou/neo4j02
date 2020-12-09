@@ -506,6 +506,7 @@ console.log('size ',keywordMap.size);
               console.log("all rel of node case");
          }else if(otherFlag.found==true&&otherFlag.counter==2){
               console.log('two values case');
+              AjaxTwoValuesSearchCase(otherFlag.key[0], otherFlag.key[1]);
 
          }else {
               console.log('add more cases');
@@ -591,3 +592,37 @@ function AjaxNodeAndPropSearchCase(node, prop){
                   });
 }
 
+function AjaxTwoValuesSearchCase(value1,value2){
+ $.ajax({
+              type: 'GET',
+              url: 'http://localhost:8080/search/' + value1+ '/'+ value2 ,
+              dataType : "json",
+              contentType:"application/json",
+              success: function(data){ // IF DATA NULL...
+              console.log("DATA:  ",data);
+              if (data.length == 0){console.log("no relationship between values ")};
+
+                var table = $('<table>').addClass('resultTable');
+                $.each( data, function( key, val ) {
+                    console.log("stringify:",JSON.stringify(val)); //.replace("{\"value\":", "").replace(/\}}/g, "}"));
+                   // console.log("name",val.value.name);
+                    var items = [];
+                    var value = JSON.stringify(val).replace("type(r)\":", "").replace(/[&\/\\#+()$~%'"*?<>{}]/g, '');
+                    var arr = value.split(',');
+                    console.log("check json: ", arr);
+                    for (let i = 0; i < arr.length; ++i) {
+                        //  alert(arr[i]);
+                        items.push( "<td>" + arr[i] + "</td>" );
+                    }
+
+                    var row = $('<tr>').addClass('bar').append(items.join(""));
+                    //console.log("btn id is:", val.value.id);
+                    table.append(row);
+                    //  items.push( "<label>next-----------</label>" );
+
+                });
+                $(table).appendTo($('#theTable2'));//.attr("id",'theTable').insertAfter( ".box2" ));
+
+              }
+          });
+}

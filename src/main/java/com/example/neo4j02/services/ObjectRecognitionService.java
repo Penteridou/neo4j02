@@ -78,18 +78,25 @@ public class ObjectRecognitionService extends GenericService<Object> {
     }
 
     public Result setParamsAndSearch(String keywordInserted1,String keywordInserted2){
-        System.out.println("the keyword is property value");
+        System.out.println("the keywords are property value");
+        System.out.println(keywordInserted1+" "+keywordInserted2);
         Map<String,Object> params = new HashMap<>();
         params.put("props",getAllPropertiesListed()); // current properties
         String query =
                 "MATCH (n) \n" +
-                        "unwind keys(n) as prop\n" +
-                        "MATCH (n) WHERE n[prop]  =~ '(?i).*"+keywordInserted1+".*'\n" +
-                        "MATCH (m) WHERE m[prop]  =~ '(?i).*"+keywordInserted2+".*'\n" +
-                        "MATCH (n)-[r]-(m) RETURN distinct type(r) as value";
+                        "unwind keys(n) as nprop\n" +
+                        "MATCH (n) WHERE n.nprop  =~ '(?i).*"+keywordInserted1+".*'\n" +
+                        "MATCH (m)" +
+                        "unwind keys(m) as mprop\n" +
+                        "WHERE m.mprop  =~ '(?i).*"+keywordInserted2+".*'\n" +
+                        "MATCH (n)-[r]-(m) return distinct labels(startNode(r)) as starter_node,type(r), n";
                        // else return both (OR) "RETURN labels(n) as NodeLabel, n as info";
         return Neo4jSessionFactory.getInstance().getNeo4jSession().query(query, params);
 
+//        MATCH (n) WHERE n.writer="Shakespeare"
+//        MATCH (m) WHERE m.year=1603
+//        match (n)-[r]-(m)
+//        return r
 
     }
 
