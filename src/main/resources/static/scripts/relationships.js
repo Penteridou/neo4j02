@@ -3,6 +3,8 @@
     $(document).ready(function(){
       $("#result").on("click", "button.showrelationshiptypes", function(){ //DELEGATION
           console.log("showrelationshiptypes running");
+           $(this).siblings().removeClass("buttonpressed") ;
+           $(this).addClass("buttonpressed");
           var rel =$(this).text()
           localStorage.setItem("currentRelationshipType", rel);
           $("#result2").empty();
@@ -205,7 +207,9 @@ function ajaxForNodesRel(rel){
                   console.log("labels: ", labelA,labelB);
                   items.push( "<button class='shownodes'>" + labelA + "</button>" );
                   items.push( "<label>-</label>" );
-                  items.push( "<button class='showrelationshiptypes'>" + rel + "</button>" );
+                  var x="<button class='showrelationshiptypes'><H1><i>" + rel + "</i></H1></button>"
+                  $(x).addClass("buttonsquared");
+                  items.push( "<button class='showrelationshiptypes'><i>" + rel + "</i></button>" );
                   items.push( "<label>-></label>" );
                   items.push( "<button class='shownodes'>" + labelB + "</button>" );
                 });

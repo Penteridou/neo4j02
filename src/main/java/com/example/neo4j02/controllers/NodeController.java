@@ -126,6 +126,11 @@ public class NodeController<T> { // GenericController
         return  nodeService.getNodeRelationshipsId(node,id);
     }
 
+    //return rel between two nodes
+    @GetMapping("/relationships/{node1}/{node2}")
+    public Object getTwoNodesRel(@PathVariable String node1, @PathVariable String node2){return nodeService.getTwoNodesRel(node1,node2);
+    }
+
     //-------------------- EXPLORE RELATIONSHIPS----------------------------------------------------------------------------------------
 
     //count relationships
@@ -153,11 +158,6 @@ public class NodeController<T> { // GenericController
     //return all relationships of this type
     @GetMapping("/relationship/nodesinvolved/{rel}")
     public Object getInvolvedNodes(@PathVariable String rel){return  nodeService.getInvolvedNodes(rel); }
-
-    //return rel between two nodes
-    @GetMapping("/relationships/{node1}/{node2}")
-    public Object getTwoNodesRel(@PathVariable String node1, @PathVariable String node2){return nodeService.getTwoNodesRel(node1,node2);
-    }
 
     //-------------------- EXPLORE PROPERTIES----------------------------------------------------------------------------------------
 

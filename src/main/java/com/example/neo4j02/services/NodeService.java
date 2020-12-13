@@ -108,7 +108,7 @@ public class NodeService extends GenericService<Object> {
         Map<String,Object> params = new HashMap<>();
         String query="match (b:"+node1+"),(e:"+node2+")\n" +
                 "match (b)-[r]-(e)\n" +
-                "return distinct labels(startNode(r)) as starter_node,type(r)";
+                "return distinct labels(startNode(r)) as starter_node,type(r),labels(endNode(r)) as endNode";
         return Neo4jSessionFactory.getInstance().getNeo4jSession().query(query,params);
     }
 

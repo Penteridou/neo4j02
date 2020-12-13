@@ -82,21 +82,51 @@ public class ObjectRecognitionService extends GenericService<Object> {
         System.out.println(keywordInserted1+" "+keywordInserted2);
         Map<String,Object> params = new HashMap<>();
         params.put("props",getAllPropertiesListed()); // current properties
-        String query =
+        String query ="MATCH (n) \n" +
+                "unwind keys(n) as prop\n" +
+                "with prop as p\n" +
+                "match (n)\n" +
+                "WHERE n[p]  =~ '(?i).*"+keywordInserted1+".*'\n" +
+                "with n as n1,p as p1\n" +
                 "MATCH (n) \n" +
-                        "unwind keys(n) as nprop\n" +
-                        "MATCH (n) WHERE n.nprop  =~ '(?i).*"+keywordInserted1+".*'\n" +
-                        "MATCH (m)" +
-                        "unwind keys(m) as mprop\n" +
-                        "WHERE m.mprop  =~ '(?i).*"+keywordInserted2+".*'\n" +
-                        "MATCH (n)-[r]-(m) return distinct labels(startNode(r)) as starter_node,type(r), n";
-                       // else return both (OR) "RETURN labels(n) as NodeLabel, n as info";
+                "unwind keys(n) as prop\n" +
+                "with prop as p,n1,p1\n" +
+                "match (n)\n" +
+                " WHERE n[p]  =~ '(?i).*"+keywordInserted2+".*'\n" +
+                "match (n1)-[r]-(n)\n" +
+                "return distinct\n type(r)," +
+                "case \n" +
+                "\twhen startNode(r)[p1] is null then startNode(r)[p]\n" +
+                "    else startNode(r)[p1] \n" +
+                " end    as starter_node,\n" +
+                "  case \n" +
+                "\twhen endNode(r)[p1] is null then endNode(r)[p]\n" +
+                "    else endNode(r)[p1] \n" +
+                " end    as end_node";
         return Neo4jSessionFactory.getInstance().getNeo4jSession().query(query, params);
 
-//        MATCH (n) WHERE n.writer="Shakespeare"
-//        MATCH (m) WHERE m.year=1603
-//        match (n)-[r]-(m)
-//        return r
+//        MATCH (n)
+//        unwind keys(n) as prop
+//        with prop as p
+//        match (n)
+//        where n[p]="Shakespeare"
+//        with n as n1
+//        MATCH (n)
+//        unwind keys(n) as prop
+//        with prop as p,n1
+//        match (n)
+//        where n[p]="HamletPrinceofDenmark"
+//        match (n1)-[r]-(n)
+//        return distinct
+//case
+//	when startNode(r)[p1] is null then startNode(r)[p]
+//    else startNode(r)[p1]
+// end    as starter_node,
+//   type(r),
+//  case
+//	when endNode(r)[p1] is null then endNode(r)[p]
+//    else endNode(r)[p1]
+// end    as end_node
 
     }
 
