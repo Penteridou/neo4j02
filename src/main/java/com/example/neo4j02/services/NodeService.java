@@ -162,6 +162,33 @@ public class NodeService extends GenericService<Object> {
         return Neo4jSessionFactory.getInstance().getNeo4jSession().query(query,params);
     }
 
+    public Result getNodesOfValue(String node1, String node2,String value){
+        System.out.println("Returns all : "+node1+" nodes related to  "+node2+" node that matches the value: "+value);
+        Map<String,Object> params = new HashMap<>();
+        System.out.println("1: "+node1+" 2: "+node2);
+        if (node1.equals("node1missing")){
+            System.out.println("case with 1 node");
+            String query = "MATCH (n:"+node2+")\n" +
+                    "        unwind keys(n) as prop\n" +
+                    "        with prop as p\n" +
+                    "        match (n)\n" +
+                    "        where n[p]=~ '(?i).*"+value+".*'\n" +
+                    "        return distinct n as info";
+            return Neo4jSessionFactory.getInstance().getNeo4jSession().query(query, params);
+        }else {
+            System.out.println("case with 2 nodes");
+            String query = "MATCH (n:"+node2+")\n" +
+                    "        unwind keys(n) as prop\n" +
+                    "        with prop as p\n" +
+                    "        match (n)\n" +
+                    "        where n[p]=~ '(?i).*"+value+".*'\n" +
+                    "        with n as n1\n" +
+                    "        match (n1)-[r]-(b:"+node1+")\n" +
+                    "        return distinct b as info";
+            return Neo4jSessionFactory.getInstance().getNeo4jSession().query(query, params);
+        }
+    }
+
     //------------------EXPLORE SCHEMA ---------------------------------------------------------------------------------
 
     //return schema nodes and their relationships

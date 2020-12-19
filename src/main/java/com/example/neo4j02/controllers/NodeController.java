@@ -96,6 +96,7 @@ public class NodeController<T> { // GenericController
     @GetMapping("/searchforrel/{keyword}")
     public Object getObjectRel(@PathVariable String keyword){ return  objectRecognitionService.setParamsAndSearchRel(keyword); }
 
+
     //-------------------- EXPLORE NODES------------------------------------------------------------------------------------------------
 
     //count nodes
@@ -130,6 +131,9 @@ public class NodeController<T> { // GenericController
     @GetMapping("/relationships/{node1}/{node2}")
     public Object getTwoNodesRel(@PathVariable String node1, @PathVariable String node2){return nodeService.getTwoNodesRel(node1,node2);
     }
+
+    @GetMapping("/nodes/value/{node1}/{node2}/{value}")
+    public Object getNodesOfValue(@PathVariable String node1,@PathVariable String node2,@PathVariable String value){return  nodeService.getNodesOfValue(node1,node2,value); }
 
     //-------------------- EXPLORE RELATIONSHIPS----------------------------------------------------------------------------------------
 

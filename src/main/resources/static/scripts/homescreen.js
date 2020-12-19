@@ -1,4 +1,5 @@
-//UPDATED 17/5
+//UPDATED 14/12
+//TO FIX : 366
 
 
 
@@ -357,12 +358,12 @@ console.log('size ',keywordMap.size);
      }
      //
    // if (keywordMap.size==2){
-        if( (otherFlag.found==true&&propFlag.found==true) ){ //ex. Book title Potter TO FIX: OR TITLE POTTER
+        if( (otherFlag.found==true&&propFlag.found==true) ){ //ex. Book title Potter
                  if(nodeFlag.found==true){
                      console.log(" node's prop equals to a value");
                      ajaxForNodePropValue(nodeFlag.key[0],propFlag.key[0],otherFlag.key[0]);
                 }else{
-                    console.log("prop equals to a value");
+                    console.log("prop equals to a value");// TO FIX: OR TITLE POTTER
                      // ajaxForNodePropValue(0,propFlag.key[0],otherFlag.key[0]);
                 }
         }else if(nodeFlag.found==true&&propFlag.found==true){       //ex. Book price
@@ -373,9 +374,13 @@ console.log('size ',keywordMap.size);
                          console.log('node&rel case')
                          ajaxForNodesRel(relFlag.key[0]);
 
-        }else if(nodeFlag.found==true&&otherFlag.found==true){      //ex. Book Potter
-                console.log('node&other case')
-                 AjaxSingleValueSearchCase(otherFlag.key[0]);
+        }else if(nodeFlag.found==true&&otherFlag.found==true){
+                console.log('node(s)&other case')
+                if(nodeFlag.counter==1){                             //ex. Book Potter
+                  AjaxNodesValueSearchCase("node1missing",nodeFlag.key[0],otherFlag.key[0]);
+                }else{                                               //ex. Book Potter Shakespeare
+                  AjaxNodesValueSearchCase(nodeFlag.key[0],nodeFlag.key[1],otherFlag.key[0]);
+                }
 
          }else if( (nodeFlag.found==true&&allNodesFlag.found==true) ){ //Book nodes
                  ajaxAllnodesOf(nodeFlag.key[0]);
@@ -576,6 +581,45 @@ function ajaxForNodePropValue(node,prop,value){
  $.ajax({
                type: 'GET',
                url: 'http://localhost:8080/property/propertyOfnode/'+ node +'/' +prop +'/' +value,
+               dataType : "json",
+               contentType:"application/json",
+               success: function(data){
+
+
+                          console.log(data);
+                          var items = [];
+                          var table = $('<table>').addClass('resultTable');
+                           $.each( data, function( key, val ) { //check the value title from the query result to figure out what it is , example: ("shownodes":"Book")
+                              var value = JSON.stringify(val);// .replace("value", "").replace(/[&\/\\#,+()$~%.'":*?<>{}]/g, '');
+                              console.log("the initial value is: "+value);
+
+                                    var items = [];
+                                    var value = JSON.stringify(val).replace("info\":", "").replace(/[&\/\\#+()$~%'"*?<>{}]/g, '');
+                                    var arr = value.split(',');
+                                    console.log("check json: ", arr);
+                                    for (let i = 0; i < arr.length; ++i) {
+                                         if(!arr[i].endsWith("null")){
+                                            items.push( "<td>" + arr[i] + "</td>" );
+                                         }
+                                    }
+                                   // var btn= $( "<button>check relationships</button>").addClass("checkRelBtn").attr("id",val.value.id);
+                                    var row = $('<tr>').addClass('bar').append(items.join("")); //.append(btn);
+                                    //console.log("btn id is:", val.value.id);
+                                    table.append(row);
+
+                             $(table).appendTo($( "<div style='overflow-x:auto'>Table</div>" ).insertAfter( ".box2" ));
+
+
+                          });
+               }
+           });
+}
+
+function AjaxNodesValueSearchCase(node1,node2,value){
+
+ $.ajax({
+               type: 'GET',
+               url: 'http://localhost:8080/nodes/value/'+ node1 +'/' +node2 +'/' +value,
                dataType : "json",
                contentType:"application/json",
                success: function(data){
