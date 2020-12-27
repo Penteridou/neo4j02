@@ -84,8 +84,6 @@ public class NodeController<T> { // GenericController
     public String getKeywordType(@PathVariable String keyword){
         return objectRecognitionService.getKeywordType(keyword); }
 
-//    public Object getObjectType(@PathVariable String keyword) {
-//        return objectRecognitionService.setParamsAndSearchNameEntity(keyword); }
 
     //node and property of the keyword
     @GetMapping("/searchentity/{keyword}")

@@ -152,7 +152,7 @@ function ajaxForRel(rel){
 }
 
 function ajaxForRelValues(prop){
-
+console.log("properties of relationship ", prop);
       $.ajax({
            type: 'GET',
            url: 'http://localhost:8080/relationship/propertiesvalues/' + localStorage.getItem("currentRelationshipType") +'/'+ prop,

@@ -82,9 +82,9 @@ public class NodeService extends GenericService<Object> {
 
     //return a relationship properties VALUES
     public Result getRelPropertiesValues(String rel,String prop){
-        System.out.println("rel parsed: "+rel);
+        System.out.println("rel parsed: "+rel +"prop parsed: "+prop);
         Map<String,Object> params = new HashMap<>();
-        String query="MATCH (n)-[r:RATED]->(m) RETURN distinct r."+prop+"";
+        String query="MATCH (n)-[r:"+rel+"]->(m) WHERE exists(r."+prop+") return distinct r."+prop+", labels(startNode(r)) as start , type(r)  as r, labels(endNode(r)) as end ";
         return Neo4jSessionFactory.getInstance().getNeo4jSession().query(query,params);
     }
 
