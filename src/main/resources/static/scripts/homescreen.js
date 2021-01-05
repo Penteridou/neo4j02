@@ -67,7 +67,7 @@ $(document).ready(function(){
 $(document).ready(function(){
    $("#btn").click(function(){
         var keyword = $("#keywordinput").val();
-        wordsCounter = countWords(keyword);           // keywords inserted
+        wordsCounter = countWords(keywordsToArray(keyword));           // keywords inserted
         console.log("wordsCounter ",wordsCounter);
         $("#result").empty();
         $("#result2").empty();
@@ -304,126 +304,138 @@ function keywordIsACategory(keyword){
 //}
 
 function keywordMapHandling(keywordMap){
- console.log("inside the Map handling: ", keywordMap);
- //create flag objects for any keyword case {exists, keys array, counter}
-var nodeFlag= {found:false,key: [],counter:0};
-var propFlag= {found:false,key: [],counter:0};
-var relFlag= {found:false,key: [],counter:0};
-var otherFlag= {found:false,key: [],counter:0};
-var allNodesFlag = {found:false,key: [],counter:0};
-var allPropFlag= {found:false,key: [],counter:0};
-var allRelFlag = {found:false,key: [],counter:0};
 
-console.log('size ',keywordMap.size);
 
-     for (const [key, value] of keywordMap.entries()) {
-    //   console.log('key, value: ');
-    //   console.log(key, value);
-       if (value=='shownodes'){
-                nodeFlag.found=true;
-                nodeFlag.key[nodeFlag.counter]=key;
-                nodeFlag.counter++;
-                console.log('SUCCESS: ', nodeFlag);
+         console.log("inside the Map handling: ", keywordMap);
+         //create flag objects for any keyword case {exists, keys array, counter}
+        var nodeFlag= {found:false,key: [],counter:0};
+        var propFlag= {found:false,key: [],counter:0};
+        var relFlag= {found:false,key: [],counter:0};
+        var otherFlag= {found:false,key: [],counter:0};
+        var allNodesFlag = {found:false,key: [],counter:0};
+        var allPropFlag= {found:false,key: [],counter:0};
+        var allRelFlag = {found:false,key: [],counter:0};
 
-       }else if(value=="showproperties"){
-            propFlag.found=true;
-            propFlag.key[propFlag.counter]=key;
-            propFlag.counter++;
+        console.log('size ',keywordMap.size);
 
-        }else if(value=="showrelationshiptypes"){
-            relFlag.found=true;
-            relFlag.key[relFlag.counter]=key;
-            relFlag.counter++;
+             for (const [key, value] of keywordMap.entries()) {
+            //   console.log('key, value: ');
+            //   console.log(key, value);
+               if (value=='shownodes'){
+                        nodeFlag.found=true;
+                        nodeFlag.key[nodeFlag.counter]=key;
+                        nodeFlag.counter++;
+                        console.log('SUCCESS: ', nodeFlag);
 
-        }else if(value=="nodes"){
-             allNodesFlag.found=true;
-             allNodesFlag.key[allNodesFlag.counter]=key;
-             allNodesFlag.counter++;
+               }else if(value=="showproperties"){
+                    propFlag.found=true;
+                    propFlag.key[propFlag.counter]=key;
+                    propFlag.counter++;
 
-        }else if(value=="properties"){
-              allPropFlag.found=true;
-              allPropFlag.key[allPropFlag.counter]=key;
-              allPropFlag.counter++;
+                }else if(value=="showrelationshiptypes"){
+                    relFlag.found=true;
+                    relFlag.key[relFlag.counter]=key;
+                    relFlag.counter++;
 
-        }else if(value=="relTypes"){
-               allRelFlag.found=true;
-               allRelFlag.key[allRelFlag.counter]=key;
-               allRelFlag.counter++;
+                }else if(value=="nodes"){
+                     allNodesFlag.found=true;
+                     allNodesFlag.key[allNodesFlag.counter]=key;
+                     allNodesFlag.counter++;
 
-        }else{
-            otherFlag.found=true;
-            otherFlag.key[otherFlag.counter]=key;
-            otherFlag.counter++;
-        }//add categories
-     }
-     //
-   // if (keywordMap.size==2){
-        if( (otherFlag.found==true&&propFlag.found==true) ){ //ex. Book title Potter
-                 if(nodeFlag.found==true){
-                     console.log(" node's prop equals to a value");
-                     ajaxForNodePropValue(nodeFlag.key[0],propFlag.key[0],otherFlag.key[0]);
+                }else if(value=="properties"){
+                      allPropFlag.found=true;
+                      allPropFlag.key[allPropFlag.counter]=key;
+                      allPropFlag.counter++;
+
+                }else if(value=="relTypes"){
+                       allRelFlag.found=true;
+                       allRelFlag.key[allRelFlag.counter]=key;
+                       allRelFlag.counter++;
+
                 }else{
-                    console.log("prop equals to a value");// TO FIX: OR TITLE POTTER
-                     // ajaxForNodePropValue(0,propFlag.key[0],otherFlag.key[0]);
-                }
-        }else if(nodeFlag.found==true&&propFlag.found==true){       //ex. Book price
-              console.log('node&prop case');
-              AjaxNodeAndPropSearchCase(nodeFlag.key[0] , propFlag.key[0]);
+                    otherFlag.found=true;
+                    otherFlag.key[otherFlag.counter]=key;
+                    otherFlag.counter++;
+                }//add categories}
+             }
+             //
+           // if (keywordMap.size==2){
+                if( (otherFlag.found==true&&propFlag.found==true) ){ //ex. Book title Potter
+                         if(nodeFlag.found==true){
+                             console.log(" node's prop equals to a value");
+                             ajaxForNodePropValue(nodeFlag.key[0],propFlag.key[0],otherFlag.key[0]);
+                        }else{
+                            console.log("prop equals to a value");// TO FIX: OR TITLE POTTER
+                              ajaxForNodePropValue(0,propFlag.key[0],otherFlag.key[0]);
+                        }
+                }else if(nodeFlag.found==true&&propFlag.found==true){       //ex. Book price
+                      console.log('node&prop case');
+                      AjaxNodeAndPropSearchCase(nodeFlag.key[0] , propFlag.key[0]);
 
-        }else if(nodeFlag.found==true&&relFlag.found==true){        //ex. Book WROTE
-                         console.log('node&rel case')
-                         ajaxForNodesRel(relFlag.key[0]);
+                }else if(nodeFlag.found==true&&relFlag.found==true){        //ex. Book WROTE
+                                 console.log('node&rel case')
+                                 ajaxForNodesRel(relFlag.key[0]);
 
-        }else if(nodeFlag.found==true&&otherFlag.found==true){
-                console.log('node(s)&other case')
-                if(nodeFlag.counter==1){                             //ex. Book Potter
-                  AjaxNodesValueSearchCase("node1missing",nodeFlag.key[0],otherFlag.key[0]);
-                }else{                                               //ex. Book Potter Shakespeare
-                  AjaxNodesValueSearchCase(nodeFlag.key[0],nodeFlag.key[1],otherFlag.key[0]);
-                }
+                }else if(nodeFlag.found==true&&otherFlag.found==true){
+                        console.log('node(s)&other case')
+                        if(nodeFlag.counter==1){                             //ex. Book Potter
+                          AjaxNodesValueSearchCase("node1missing",nodeFlag.key[0],otherFlag.key[0]);
+                        }else{                                               //ex. Book Potter Shakespeare
+                          AjaxNodesValueSearchCase(nodeFlag.key[0],nodeFlag.key[1],otherFlag.key[0]);
+                        }
 
-         }else if( (nodeFlag.found==true&&allNodesFlag.found==true) ){ //Book nodes
-                 ajaxAllnodesOf(nodeFlag.key[0]);
-                 console.log("all nodes of node case");
+                 }else if( (nodeFlag.found==true&&allNodesFlag.found==true) ){ //Book nodes
+                         ajaxAllnodesOf(nodeFlag.key[0]);
+                         console.log("all nodes of node case");
 
-         }else if( nodeFlag.found==true&&allPropFlag.found==true  ){ //Book properties
-              ajaxAllpropertiesOf(nodeFlag.key[0]);
-              console.log("all prop of node case");
+                 }else if( nodeFlag.found==true&&allPropFlag.found==true  ){ //Book properties
+                      ajaxAllpropertiesOf(nodeFlag.key[0]);
+                      console.log("all prop of node case");
 
-         }else if( nodeFlag.found==true&&allRelFlag.found==true ){ //Book relationships
-              ajaxAllrelTypesOf(nodeFlag.key[0]);
-              console.log("all rel of node case");
+                 }else if( nodeFlag.found==true&&allRelFlag.found==true ){ //Book relationships
+                      ajaxAllrelTypesOf(nodeFlag.key[0]);
+                      console.log("all rel of node case");
 
-         }else if(otherFlag.found==true&&otherFlag.counter==2){ //ex. Rowling Potter
-              console.log('two values case');
-              AjaxTwoValuesSearchCase(otherFlag.key[0], otherFlag.key[1]);
+                 }else if(otherFlag.found==true&&otherFlag.counter==2){ //ex. Rowling Potter
+                      console.log('two values case');
+                      AjaxTwoValuesSearchCase(otherFlag.key[0], otherFlag.key[1]);
 
-         }else if(nodeFlag.found==true&&nodeFlag.counter>=2){      //ex. Book Author Editor (2 or more node labels)
-               console.log('2 or more nodes case')
-               for(var k=0;k<nodeFlag.counter;k++){
-                    for(var l=k+1;l<=nodeFlag.counter;l++){
-                        AjaxTwoNodesSearchCase(nodeFlag.key[k],nodeFlag.key[l]);
-                    }
-               }
-         }else {
-              console.log('add more cases');
-         }
-   // } //else if: 3 words case
+                 }else if(nodeFlag.found==true&&nodeFlag.counter>=2){      //ex. Book Author Editor (2 or more node labels)
+                       console.log('2 or more nodes case')
+                       for(var k=0;k<nodeFlag.counter;k++){
+                            for(var l=k+1;l<=nodeFlag.counter;l++){
+                                AjaxTwoNodesSearchCase(nodeFlag.key[k],nodeFlag.key[l]);
+                            }
+                       }
+                 }else {
+                      console.log('add more cases');
+                 }
+           // } //else if: 3 words case
 
 }//function ends
 
 
 
 //words count in input #keywordinput
-function countWords(keyword){
- return  (keyword.replace(/(^\s*)|(\s*$)/gi,"").replace(/[ ]{2,}/gi," ").replace(/\n /,"\n").split(' ').length);
+function countWords(array){
+ return  array.length; //(keyword.replace(/(^\s*)|(\s*$)/gi,"").replace(/[ ]{2,}/gi," ").replace(/\n /,"\n").split(' ').length);
 }
 
 function keywordsToArray(keyword){
     var wordsArr= [];
-    for(i=0; i< (keyword.replace(/(^\s*)|(\s*$)/gi,"").replace(/[ ]{2,}/gi," ").replace(/\n /,"\n").split(' ').length) ; i++){
-        wordsArr[i]=keyword.replace(/(^\s*)|(\s*$)/gi,"").replace(/[ ]{2,}/gi," ").replace(/\n /,"\n").split(' ')[i];
+    if (keyword.indexOf('\'') >= 0 || keyword.indexOf('"') >= 0) {
+       console.log("quotes spot");
+       for(i=0; i< (keyword.replace(/(^\s*)|(\s*$)/gi,"").replace(/[ ]{2,}/gi," ").replace(/\n /,"\n").split('\'').length) ; i++){
+            if(keyword.replace(/(^\s*)|(\s*$)/gi,"").replace(/[ ]{2,}/gi," ").replace(/\n /,"\n").split('\'')[i] !=''){
+               wordsArr[i]=keyword.replace(/(^\s*)|(\s*$)/gi,"").replace(/[ ]{2,}/gi," ").replace(/\n /,"\n").split('\'')[i];
+               }
+           }
+    }else{
+        for(i=0; i< (keyword.replace(/(^\s*)|(\s*$)/gi,"").replace(/[ ]{2,}/gi," ").replace(/\n /,"\n").split(' ').length) ; i++){
+            wordsArr[i]=keyword.replace(/(^\s*)|(\s*$)/gi,"").replace(/[ ]{2,}/gi," ").replace(/\n /,"\n").split(' ')[i];
+        }
     }
+    wordsArr = wordsArr.filter(item => item);
     console.log("words are: ", wordsArr);
     return wordsArr;
 }

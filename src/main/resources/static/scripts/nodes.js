@@ -106,9 +106,36 @@ $(document).ready(function(){
                 $.each( data, function( key, val ) {
                     //console.log("stringify:",JSON.stringify(val)); //.replace("{\"value\":", "").replace(/\}}/g, "}"));
                    // console.log("name",val.value.name);
+
+                           console.log("stringify:",JSON.stringify(val)); //.replace("{\"value\":", "").replace(/\}}/g, "}"));
+                           var propertiesArray= val.value.propertyList;
+
+                           console.log("not merged------",val.value);
+
+                           var valueFinal='';
+
+                           if (typeof propertiesArray !== 'undefined' && propertiesArray.length > 0) {
+                               console.log("before-----------",JSON.stringify(val.value));
+                               var valueF = {};
+                                valueF.id = val.value.id;
+                                for (let i = 0; i < propertiesArray.length; ++i){
+                                   console.log('proparr',propertiesArray[i])
+                                    console.log('key value',propertiesArray[i].key, propertiesArray[i].value)
+                                   valueF[propertiesArray[i].key] = propertiesArray[i].value;
+
+                                }
+
+                               console.log("value fixed------",valueF );
+                               valueFinal= JSON.stringify(valueF).replace("value\":", "").replace(/[&\/\\#+()$~%'"*?<>{}]/g, '');;
+
+                           }else{
+                                valueFinal = JSON.stringify(val).replace("value\":", "").replace(/[&\/\\#+()$~%'"*?<>{}]/g, '');
+
+                           }
+
+
                     var items = [];
-                    var value = JSON.stringify(val).replace("details\":", "").replace(/[&\/\\#+()$~%'"*?<>{}]/g, '');
-                    var arr = value.split(',');
+                    var arr = valueFinal.split(',');
                     console.log("check json: ", arr);
                     for (let i = 0; i < arr.length; ++i) {
                            console.log(arr[i]);
@@ -117,10 +144,10 @@ $(document).ready(function(){
                          items.push( "<td>" + arr[i] + "</td>" );
                         }
                     }
-                    console.log("btn2 id is:", val.details.id);
+                    console.log("btn2 id is:", val.value.id);
                     console.log("btn2 node attribute will be", val.theOtherNode);
-                    var btn= $( "<button>check relationships</button>").addClass("checkRelBtn2").attr("id",val.details.id).attr("node",val.theOtherNode); // CODE ADAPTION ~~
-                    var vizBtn=$( "<button>viz relationships</button>").addClass("vizRelBtn").attr("vid",val.details.id);
+                    var btn= $( "<button>check relationships</button>").addClass("checkRelBtn2").attr("id",val.value.id).attr("node",val.theOtherNode); // CODE ADAPTION ~~
+                    var vizBtn=$( "<button>viz relationships</button>").addClass("vizRelBtn").attr("vid",val.value.id);
                     var row = $('<tr>').addClass('bar').append(items.join("")).append(btn).append(vizBtn);
                     //console.log("btn id is:", val.value.id);
                     table.append(row);
@@ -157,9 +184,34 @@ $(document).ready(function(){
                 $.each( data, function( key, val ) {
                     //console.log("stringify:",JSON.stringify(val)); //.replace("{\"value\":", "").replace(/\}}/g, "}"));
                    // console.log("name",val.value.name);
+                    console.log("stringify:",JSON.stringify(val)); //.replace("{\"value\":", "").replace(/\}}/g, "}"));
+                          var propertiesArray= val.value.propertyList;
+
+                          console.log("not merged------",val.value);
+
+                          var valueFinal='';
+
+                          if (typeof propertiesArray !== 'undefined' && propertiesArray.length > 0) {
+                              console.log("before-----------",JSON.stringify(val.value));
+                              var valueF = {};
+                               valueF.id = val.value.id;
+                               for (let i = 0; i < propertiesArray.length; ++i){
+                                  console.log('proparr',propertiesArray[i])
+                                   console.log('key value',propertiesArray[i].key, propertiesArray[i].value)
+                                  valueF[propertiesArray[i].key] = propertiesArray[i].value;
+
+                               }
+
+                              console.log("value fixed------",valueF );
+                              valueFinal= JSON.stringify(valueF).replace("value\":", "").replace(/[&\/\\#+()$~%'"*?<>{}]/g, '');;
+
+                          }else{
+                               valueFinal = JSON.stringify(val).replace("value\":", "").replace(/[&\/\\#+()$~%'"*?<>{}]/g, '');
+
+                          }
+
                     var items = [];
-                    var value = JSON.stringify(val).replace("details\":", "").replace(/[&\/\\#+()$~%'"*?<>{}]/g, '');
-                    var arr = value.split(',');
+                    var arr = valueFinal.split(',');
                     console.log("check json: ", arr);
                     for (let i = 0; i < arr.length; ++i) {
                            console.log(arr[i]);
@@ -168,10 +220,10 @@ $(document).ready(function(){
                          items.push( "<td>" + arr[i] + "</td>" );
                         }
                     }
-                    console.log("btn3 id is:", val.details.id);
+                    console.log("btn3 id is:", val.value.id);
                     console.log("btn3 node attribute will be", val.theOtherNode);
-                    var btn= $( "<button>check relationships again</button>").addClass("checkRelBtn2").attr("id",val.details.id).attr("node",val.theOtherNode);;
-                    var vizBtn=$( "<button>viz relationships</button>").addClass("vizRelBtn").attr("vid",val.details.id);
+                    var btn= $( "<button>check relationships again</button>").addClass("checkRelBtn2").attr("id",val.value.id).attr("node",val.theOtherNode);;
+                    var vizBtn=$( "<button>viz relationships</button>").addClass("vizRelBtn").attr("vid",val.value.id);
                     var row = $('<tr>').addClass('bar').append(items.join("")).append(btn).append(vizBtn);
                    // var row = $('<tr>').addClass('bar').append(items.join(""));
                     //console.log("btn id is:", val.value.id);
@@ -232,14 +284,37 @@ function  ajaxAllnodesOf(node) {
                 var table = $('<table>').addClass('resultTable');
                 $.each( data, function( key, val ) {
                     console.log("stringify:",JSON.stringify(val)); //.replace("{\"value\":", "").replace(/\}}/g, "}"));
-                   // console.log("name",val.value.name);
+                    var propertiesArray= val.value.propertyList;
+
+                    console.log("not merged------",val.value);
+
+                    var valueFinal='';
+
+                    if (typeof propertiesArray !== 'undefined' && propertiesArray.length > 0) {
+                        console.log("before-----------",JSON.stringify(val.value));
+                        var valueF = {};
+                         valueF.id = val.value.id;
+                         for (let i = 0; i < propertiesArray.length; ++i){
+                            console.log('proparr',propertiesArray[i])
+                             console.log('key value',propertiesArray[i].key, propertiesArray[i].value)
+                            valueF[propertiesArray[i].key] = propertiesArray[i].value;
+
+                         }
+
+                        console.log("value fixed------",valueF );
+                        valueFinal= JSON.stringify(valueF).replace("value\":", "").replace(/[&\/\\#+()$~%'"*?<>{}]/g, '');;
+
+                    }else{
+                         valueFinal = JSON.stringify(val).replace("value\":", "").replace(/[&\/\\#+()$~%'"*?<>{}]/g, '');
+
+                    }
+
                     var items = [];
-                    var value = JSON.stringify(val).replace("value\":", "").replace(/[&\/\\#+()$~%'"*?<>{}]/g, '');
-                    var arr = value.split(',');
+                    var arr = valueFinal.split(',');
                     console.log("check json: ", arr);
                     for (let i = 0; i < arr.length; ++i) {
                         //  alert(arr[i]);
-                          if(!arr[i].endsWith("null")){
+                          if(!arr[i].endsWith("null")&&!arr[i].endsWith("[]")&&!arr[i].endsWith("false")){
                                // alert("null value")
                              items.push( "<td>" + arr[i] + "</td>" );
                           }
@@ -307,3 +382,5 @@ function  ajaxAllrelTypesOf(node) {
          }
      });
 }
+
+

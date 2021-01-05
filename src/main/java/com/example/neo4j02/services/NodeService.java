@@ -58,7 +58,7 @@ public class NodeService extends GenericService<Object> {
     public Result getNodeRelationshipsId(String node,Long id){
         System.out.println("node/id: "+node+" / "+id);
         Map<String,Object> params = new HashMap<>();
-        String query="MATCH p=( a:"+node+" )-[r]-(b) where ID(a)=" +id+ " RETURN  distinct type(r) as relType, labels(b) as theOtherNode , b as details"; //+ RETURN b NODE
+        String query="MATCH p=( a:"+node+" )-[r]-(b) where ID(a)=" +id+ " RETURN  distinct type(r) as relType, labels(b) as theOtherNode , b as value"; //+ RETURN b NODE
         return Neo4jSessionFactory.getInstance().getNeo4jSession().query(query,params);
     }
 
@@ -157,8 +157,20 @@ public class NodeService extends GenericService<Object> {
     public Result getPropOfNode(String node, String prop,String value){
         System.out.println("value of property of a node: "+prop+" "+node+" "+value);
         Map<String,Object> params = new HashMap<>();
-        String query="MATCH (n:"+node+")  WHERE n."+prop+"  =~ '(?i).*"+value+".*'\n" +
+        String query;
+             query="MATCH (n:" + node + ")  WHERE n." + prop + "  =~ '(?i).*" + value + ".*'\n" +
+                     "return n as info";
+
+        return Neo4jSessionFactory.getInstance().getNeo4jSession().query(query,params);
+    }
+
+    public Result getPropOfNodeLabel(String prop,String value){
+        System.out.println("value of property of a nodeLabel: "+prop+" "+value);
+        Map<String,Object> params = new HashMap<>();
+        String query;
+        query="MATCH (n)  WHERE n." + prop + "  =~ '(?i).*" + value + ".*'\n" +
                 "return n as info";
+
         return Neo4jSessionFactory.getInstance().getNeo4jSession().query(query,params);
     }
 

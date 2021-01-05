@@ -110,7 +110,7 @@ public class NodeController<T> { // GenericController
     //get node relationships
     @GetMapping("/node/relationships/{node}")
     public Object getNodeRelationships(@PathVariable String node){
-        return  nodeService.getNodeRelationships(node);
+       return  nodeService.getNodeRelationships(node);
     }
 
     //get all nodes of the given label
@@ -181,7 +181,12 @@ public class NodeController<T> { // GenericController
     public Object getPropOfNode(@PathVariable String prop,@PathVariable String node){return  nodeService.getPropOfNode(node,prop); }
 
     @GetMapping("/property/propertyOfnode/{node}/{prop}/{value}")
-    public Object getPropOfNode(@PathVariable String prop,@PathVariable String node,@PathVariable String value){return  nodeService.getPropOfNode(node,prop,value); }
+    public Object getPropOfNode(@PathVariable String prop,@PathVariable String node,@PathVariable String value){
+        if(node.equals('0')){return  nodeService.getPropOfNode(node,prop,value);
+        }else{
+            return  nodeService.getPropOfNodeLabel(prop,value);
+        }
+    }
 
 }
 

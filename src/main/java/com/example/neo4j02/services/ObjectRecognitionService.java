@@ -30,6 +30,8 @@ public class ObjectRecognitionService extends GenericService<Object> {
     //entire object(s) N depending on the keyword
     public Result setParamsAndSearch(String keywordInserted){
             //ckeck if keywordInserted is any property title
+        System.out.println("keywordInserted: " +keywordInserted);
+        keywordInserted = keywordInserted.replaceAll("^\'|\'$", "");
         if(checkIfKeywordIsAproperty(keywordInserted)){//set params
             System.out.println("the keyword is property");
         Map<String,Object> params = new HashMap<>();
@@ -134,7 +136,7 @@ public class ObjectRecognitionService extends GenericService<Object> {
 
     //get keyword type OK
     public String getKeywordType(String keyword){
-        System.out.println("getKeywordType method runs");
+        System.out.println("getKeywordType method runs, keyword is "+ keyword);
         String type ="";
         if(getAllPropertiesListed().contains(keyword)){
             type= "showproperties";
