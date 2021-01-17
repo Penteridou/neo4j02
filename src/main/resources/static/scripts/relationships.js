@@ -5,6 +5,10 @@
           console.log("showrelationshiptypes running");
            $(this).siblings().removeClass("buttonpressed") ;
            $(this).addClass("buttonpressed");
+              $('#result2').parent().addClass("grid-item result2GridItem") ;
+              $(this).siblings().removeClass("buttonpressed") ;
+
+
           var rel =$(this).text()
           localStorage.setItem("currentRelationshipType", rel);
           $("#result2").empty();

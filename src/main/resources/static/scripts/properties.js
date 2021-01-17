@@ -4,6 +4,10 @@ $(document).ready(function(){
   $("#result").on("click", "button.showproperties", function(){ //DELEGATION
   console.log("showproperties running");
    $("#result2").empty();
+  $('#result2').parent().addClass("grid-item result2GridItem") ;
+  $(this).siblings().removeClass("buttonpressed") ;
+  $(this).addClass("buttonpressed") ;
+    //store
    var prop =  $(this).text();
    localStorage.setItem("currentProperty", prop);
    console.log("current prop== ", prop);

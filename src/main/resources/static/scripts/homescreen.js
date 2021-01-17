@@ -4,6 +4,7 @@
 
 
   $(document).ready(function(){
+
     localStorage.setItem("currentNode", '');
     localStorage.setItem("currentProperty", '');
 
@@ -39,7 +40,9 @@ $(document).ready(function(){
   //load data as buttons according to select option and define classes to buttons (addClass method)
    $(document).ready(function(){
       $( "#mainList" ).change(function() {
+           $('#result').parent().addClass("grid-item resultGridItem") ;
           $("#result").empty();
+          $('#result2').parent().removeClass("grid-item resultGridItem") ;
            $("#result2").empty();
            $("#result3").empty();
            localStorage.setItem("currentNode", '');
@@ -53,6 +56,13 @@ $(document).ready(function(){
                     contentType:"application/json",
                     success: function(data){
                         console.log(data);
+                        if(option =="shownodes" ){
+                             $("<label>select node: </label>" ).appendTo( $("#result"));
+                         }if(option =="showrelationshiptypes" ){
+                             $("<label>select relationship: </label>" ).appendTo( $("#result"));
+                         }if(option =="showproperties" ){
+                             $("<label>select property: </label>" ).appendTo( $("#result"));
+                         }
                                 for (let nodeTitle in data) {
                                    $("<button>" + data[nodeTitle] + " </button>" ).addClass(option).appendTo( $("#result"));
                                 }

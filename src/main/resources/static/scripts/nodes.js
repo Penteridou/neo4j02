@@ -3,6 +3,7 @@
   $(document).ready(function(){
     $("#result").on("click", "button.shownodes", function(){ //DELEGATION
           console.log("shownodes running");
+           $('#result2').parent().addClass("grid-item result2GridItem") ;
            $(this).siblings().removeClass("buttonpressed") ;
            $(this).addClass("buttonpressed") ;
          // Store
