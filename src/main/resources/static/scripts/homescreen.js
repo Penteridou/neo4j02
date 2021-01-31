@@ -11,8 +11,8 @@
   });
 
 $(document).ready(function(){
-   $("#draw").click(function(){
-       window.open("viz.html");
+   $("#help").click(function(){
+       window.open("help.html");
     });
 });
 
@@ -42,8 +42,10 @@ $(document).ready(function(){
       $( "#mainList" ).change(function() {
            $('#result').parent().addClass("grid-item resultGridItem") ;
           $("#result").empty();
-          $('#result2').parent().removeClass("grid-item resultGridItem") ;
+          $('#result2').parent().removeClass("grid-item result2GridItem") ;
            $("#result2").empty();
+         $('#result4').parent().removeClass("grid-item result4GridItem") ;
+          $("#result4").empty();
            $("#result3").empty();
            localStorage.setItem("currentNode", '');
            localStorage.setItem("currentProperty", '');
@@ -57,11 +59,11 @@ $(document).ready(function(){
                     success: function(data){
                         console.log(data);
                         if(option =="shownodes" ){
-                             $("<label>select node: </label>" ).appendTo( $("#result"));
+                             $("<label>select node: </label>" ).addClass("selectLabel").appendTo( $("#result"));
                          }if(option =="showrelationshiptypes" ){
-                             $("<label>select relationship: </label>" ).appendTo( $("#result"));
+                             $("<label>select relationship: </label>" ).addClass("selectLabel").appendTo( $("#result"));
                          }if(option =="showproperties" ){
-                             $("<label>select property: </label>" ).appendTo( $("#result"));
+                             $("<label>select property: </label>" ).addClass("selectLabel").appendTo( $("#result"));
                          }
                                 for (let nodeTitle in data) {
                                    $("<button>" + data[nodeTitle] + " </button>" ).addClass(option).appendTo( $("#result"));
@@ -368,7 +370,7 @@ function keywordMapHandling(keywordMap){
                     otherFlag.counter++;
                 }//add categories}
              }
-             //
+             // cases
            // if (keywordMap.size==2){
                 if( (otherFlag.found==true&&propFlag.found==true) ){ //ex. Book title Potter
                          if(nodeFlag.found==true){
@@ -376,7 +378,7 @@ function keywordMapHandling(keywordMap){
                              ajaxForNodePropValue(nodeFlag.key[0],propFlag.key[0],otherFlag.key[0]);
                         }else{
                             console.log("prop equals to a value");// TO FIX: OR TITLE POTTER
-                              ajaxForNodePropValue(0,propFlag.key[0],otherFlag.key[0]);
+                              ajaxForNodePropValue('noNodeValue',propFlag.key[0],otherFlag.key[0]);
                         }
                 }else if(nodeFlag.found==true&&propFlag.found==true){       //ex. Book price
                       console.log('node&prop case');
@@ -507,7 +509,7 @@ function AjaxNodeAndPropSearchCase(node, prop){
 
                         });
                         $(".box2").empty();
-                        $(propTable).appendTo($( "<div style='overflow-x:auto'>Table</div>" ).insertAfter( ".box2" ));
+                        $(propTable).appendTo($( "<div style='overflow-x:auto'>Results</div>" ).insertAfter( ".box2" ));
                       }
                   });
 }
@@ -590,7 +592,7 @@ function AjaxSingleValueSearchCase (keyword){
                                }
 
                              if(resultType=="NodeLabel"){
-                             $(table).appendTo($( "<div style='overflow-x:auto'>Table</div>" ).insertAfter( ".box2" ));
+                             $(table).appendTo($( "<div style='overflow-x:auto'>Results</div>" ).insertAfter( ".box2" ));
                              }else{ table = undefined;  console.log("table deleted");}
 
                           });
@@ -629,7 +631,7 @@ function ajaxForNodePropValue(node,prop,value){
                                     //console.log("btn id is:", val.value.id);
                                     table.append(row);
 
-                             $(table).appendTo($( "<div style='overflow-x:auto'>Table</div>" ).insertAfter( ".box2" ));
+                             $(table).appendTo($( "<div style='overflow-x:auto'></div>" ).insertAfter( ".box2" ));
 
 
                           });
@@ -668,7 +670,7 @@ function AjaxNodesValueSearchCase(node1,node2,value){
                                     //console.log("btn id is:", val.value.id);
                                     table.append(row);
 
-                             $(table).appendTo($( "<div style='overflow-x:auto'>Table</div>" ).insertAfter( ".box2" ));
+                             $(table).appendTo($( "<div style='overflow-x:auto'>Results</div>" ).insertAfter( ".box2" ));
 
 
                           });

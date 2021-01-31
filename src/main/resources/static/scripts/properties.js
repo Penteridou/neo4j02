@@ -1,18 +1,22 @@
 
 //load properties buttons according to the clicked property and add classes
 $(document).ready(function(){
-  $("#result").on("click", "button.showproperties", function(){ //DELEGATION
+  $("#result, #result4").on("click", "button.showproperties", function(){ //DELEGATION
   console.log("showproperties running");
    $("#result2").empty();
   $('#result2').parent().addClass("grid-item result2GridItem") ;
   $(this).siblings().removeClass("buttonpressed") ;
   $(this).addClass("buttonpressed") ;
+  $("#theTable").empty();
+  $( ".selectLabel" ).remove();
+  $("<label>select: </label>" ).addClass("selectLabel").appendTo( $("#result2"));
     //store
    var prop =  $(this).text();
    localStorage.setItem("currentProperty", prop);
-   console.log("current prop== ", prop);
+   console.log("current prop = ", prop);
       //alert("rel");
      // $("<button>" + $(this).text() + "property nodes' relationships</button>" ).addClass("propNodeRelationships").appendTo( $("#result2"));
+
       $("<button>" + prop + " property involved nodes</button>" ).addClass("propNodes").appendTo( $("#result2"));
       if(localStorage.getItem("currentNode")!=""){
          $("<button>" + prop+ " property of "+localStorage.getItem("currentNode")+" node</button>" ).addClass("propOfCurrentNode").appendTo( $("#result2"));
@@ -44,8 +48,14 @@ $(document).ready(function(){
 // properties' involved nodes buttons onclick, CLASS .propNodes
    $(document).ready(function(){
       $("#result2").on("click", "button.propNodes", function(){
-      console.log("propNodes running");
-       $("#result").empty();
+           $(this).siblings().removeClass("buttonpressed") ;
+           $(this).addClass("buttonpressed") ;
+           $("#result4").empty();
+           $('#result4').parent().addClass("grid-item result4GridItem") ;
+              $( ".selectLabel" ).remove();
+              $("<label>select: </label>" ).addClass("selectLabel").appendTo( $("#result4"));
+      console.log("propNodes running?");
+   //    $("#result").empty();
       var prop = $( this ).text().replace("property involved nodes", "").replace(/[^a-zA-Z ]/g, "");
              $.ajax({
                   type: 'GET',
@@ -64,7 +74,7 @@ $(document).ready(function(){
                            $( "<div/>", {
                              "class": "my-new-list",
                              html: items.join( "" )
-                           }).appendTo( "#result" );
+                           }).appendTo( "#result4" );
                   }
               });
       });
@@ -74,6 +84,10 @@ $(document).ready(function(){
       $(document).ready(function(){
           $("#result2").on("click", "button.propOfCurrentNode", function(){
            console.log("propOfCurrentNode running");
+           $(this).siblings().removeClass("buttonpressed") ;
+           $(this).addClass("buttonpressed") ;
+                  $( ".selectLabel" ).remove();
+                  $("<label>select: </label>" ).addClass("selectLabel").appendTo( $("#result4"));
               $("#result").empty();
               var node = localStorage.getItem("currentNode");
               var prop = localStorage.getItem("currentProperty");
@@ -114,6 +128,8 @@ $(document).ready(function(){
       $(document).ready(function(){
       $("#result2").on("click", "button.propNodeRelationships", function(){
        console.log("propNodeRelationships running");
+           $(this).siblings().removeClass("buttonpressed") ;
+           $(this).addClass("buttonpressed") ;
        $("#result").empty();
       var prop = $( this ).text().replace("property nodes' relationships", "").replace(/[^a-zA-Z ]/g, "");
                  $.ajax({

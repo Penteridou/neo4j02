@@ -1,7 +1,7 @@
 
 //load nodes buttons according to the clicked node and add classes
   $(document).ready(function(){
-    $("#result").on("click", "button.shownodes", function(){ //DELEGATION
+    $("#result ,#result4").on("click", "button.shownodes", function(){ //DELEGATION
           console.log("shownodes running");
            $('#result2').parent().addClass("grid-item result2GridItem") ;
            $(this).siblings().removeClass("buttonpressed") ;
@@ -11,6 +11,11 @@
         localStorage.setItem("currentNode", node);
        $("#result2").empty();
        $("#result3").empty();
+       $('#result4').parent().removeClass("grid-item result4GridItem") ;
+       $("#result4").empty();
+       $("#theTable").empty();
+        $( ".selectLabel" ).remove();
+        $("<label>select: </label>" ).addClass("selectLabel").appendTo( $("#result2"));
         $("<button>" + node + " node properties</button>" ).addClass("nodeProperties").attr("value", $(this).text()).appendTo( $("#result2"));
         $("<button>" + node + " node relationships</button>" ).addClass("nodeRelationships").attr("value", $(this).text()).appendTo( $("#result2"));
         $("<button>check all " + node +" nodes</button>" ).addClass("allNodes").attr("value", $(this).text()).appendTo( $("#result2"));
@@ -48,8 +53,13 @@
    $(document).ready(function(){
       $("#result2").on("click", "button.nodeProperties", function(){
          console.log("nodeProperties running");
-         $(this).addClass("buttonpressed") ;
-       $("#result").empty();
+           $(this).siblings().removeClass("buttonpressed") ;
+           $(this).addClass("buttonpressed")
+           $("#result4").empty();
+           $('#result4').parent().addClass("grid-item result4GridItem") ;
+           $( ".selectLabel" ).remove();
+           $("<label>select: </label>" ).addClass("selectLabel").appendTo( $("#result4"));
+     //  $("#result").empty();
       var node = $( this ).val();  //text().replace("properties", "").replace(/[^a-zA-Z ]/g, "");
      //  localStorage.setItem("currentNode", node);
       //alert(node);
@@ -61,7 +71,12 @@
    $(document).ready(function(){
       $("#result2").on("click", "button.nodeRelationships", function(){
        console.log("nodeRelationships running");
-       $("#result").empty();
+       $("#result4").empty();
+      $(this).siblings().removeClass("buttonpressed") ;
+      $(this).addClass("buttonpressed")
+      $('#result4').parent().addClass("grid-item result4GridItem") ;
+     $( ".selectLabel" ).remove();
+     $("<label>select: </label>" ).addClass("selectLabel").appendTo( $("#result4"));
      //  $("#result2").children().not($( this )).hide();
      // var node = $( this ).text().replace("relationships", "").replace(/[^a-zA-Z ]/g, "");
      var node = localStorage.getItem("currentNode"); //$( this ).val();
@@ -77,6 +92,9 @@
 $(document).ready(function(){
     $("#result2").on("click", "button.allNodes", function(){
       console.log("allNodes running");
+      $("#result4").empty();
+       $(this).siblings().removeClass("buttonpressed") ;
+       $(this).addClass("buttonpressed")
     // $("#result").empty();
     var node = $( this ).val();
     // Store
@@ -147,9 +165,9 @@ $(document).ready(function(){
                     }
                     console.log("btn2 id is:", val.value.id);
                     console.log("btn2 node attribute will be", val.theOtherNode);
-                    var btn= $( "<button>check relationships</button>").addClass("checkRelBtn2").attr("id",val.value.id).attr("node",val.theOtherNode); // CODE ADAPTION ~~
-                    var vizBtn=$( "<button>viz relationships</button>").addClass("vizRelBtn").attr("vid",val.value.id);
-                    var row = $('<tr>').addClass('bar').append(items.join("")).append(btn).append(vizBtn);
+//                    var btn= $( "<button>check relationships</button>").addClass("checkRelBtn2").attr("id",val.value.id).attr("node",val.theOtherNode); // CODE ADAPTION ~~
+//                    var vizBtn=$( "<button>viz relationships</button>").addClass("vizRelBtn").attr("vid",val.value.id);
+                    var row = $('<tr>').addClass('bar').append(items.join(""))//.append(btn).append(vizBtn);
                     //console.log("btn id is:", val.value.id);
                     table.append(row);
                 });
@@ -242,15 +260,37 @@ $(document).ready(function(){
 //node relationships visualization button
 $(document).ready(function(){
     $('#theTable2,#theTable').on("click", "button.vizRelBtn", function(){
-        alert("visualization btn works!");
+       // alert("visualization btn works!");
          $("#viz").empty();
-        console.log("vis script running")
+        console.log("vis script running2")
         var nodeId = $(this).attr("vid");
         var node = localStorage.getItem("currentNode");
         var cypher = "MATCH p=( a:" + node+" )-[r]-(b) where ID(a)=" +nodeId+" RETURN p"
+//     var win=window.open('about:blank','instructions','width=300,height=200');
+//    var doc=win.document;
+//    doc.open();
+//    doc.write('<div id="instructions">instructions</div>');
+//    doc.close();
 
+//MODAL DISPLAY---------------------------------------------
+// Get the modal
+var modal = document.getElementById("myModal");
+modal.style.display = "block";
+//MODAL HANDLING
+// When the user clicks on <span> (x), close the modal
+var span = document.getElementsByClassName("close")[0];
+ span.onclick = function() {
+   modal.style.display = "none";
+ }
+
+ // When the user clicks anywhere outside of the modal, close it
+ window.onclick = function(event) {
+   if (event.target == modal) {
+     modal.style.display = "none";
+   }
+}
               var config = {
-                container_id :"viz",
+                container_id :"vizModal",
                 server_url:"bolt://localhost:7687",
                 server_user:"neo4j",
                 server_password:"pass",
@@ -334,6 +374,9 @@ function  ajaxAllnodesOf(node) {
         });
  }
 
+
+
+
 function  ajaxAllpropertiesOf(node) {
      $.ajax({
           type: 'GET',
@@ -355,7 +398,7 @@ function  ajaxAllpropertiesOf(node) {
                    $( "<div/>", {
                      "class": "my-new-list",
                      html: items.join( "" )
-                   }).appendTo( "#result" );
+                   }).appendTo( "#result4" );
           }
       });
 }
@@ -378,10 +421,9 @@ function  ajaxAllrelTypesOf(node) {
               $( "<div/>", {
                 "class": "my-new-list",
                 html: items.join( "" )
-              }).appendTo( "#result" );
+              }).appendTo( "#result4" );
 
          }
      });
 }
-
 

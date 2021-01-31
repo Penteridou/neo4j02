@@ -169,7 +169,7 @@ public class NodeService extends GenericService<Object> {
         Map<String,Object> params = new HashMap<>();
         String query;
         query="MATCH (n)  WHERE n." + prop + "  =~ '(?i).*" + value + ".*'\n" +
-                "return n as info";
+                "return n as info,labels(n) as Node label";
 
         return Neo4jSessionFactory.getInstance().getNeo4jSession().query(query,params);
     }

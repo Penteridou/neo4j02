@@ -1,7 +1,7 @@
 
 //load relationships buttons according to the clicked relationship and add classes
     $(document).ready(function(){
-      $("#result").on("click", "button.showrelationshiptypes", function(){ //DELEGATION
+      $("#result, #result4").on("click", "button.showrelationshiptypes", function(){ //DELEGATION
           console.log("showrelationshiptypes running");
            $(this).siblings().removeClass("buttonpressed") ;
            $(this).addClass("buttonpressed");
@@ -13,6 +13,8 @@
           localStorage.setItem("currentRelationshipType", rel);
           $("#result2").empty();
           $("#result3").empty();
+          $( ".selectLabel" ).remove();
+          $("<label>select: </label>" ).addClass("selectLabel").appendTo( $("#result2"));
           $("<button>" + rel + " properties</button>" ).addClass("relProperties").appendTo( $("#result2"));
           $("<button>" + rel+ " involved nodes</button>" ).addClass("relativeNodes").appendTo( $("#result2"));
           countRel(rel);
@@ -42,7 +44,11 @@ function countRel(rel){
     $(document).ready(function(){
       $("#result2").on("click", "button.relProperties", function(){
        console.log("relProperties running");
-       $("#result").empty();
+      $(this).siblings().removeClass("buttonpressed") ;
+      $(this).addClass("buttonpressed") ;
+      $('#result4').parent().addClass("grid-item result4GridItem") ;
+    //   $("#result").empty();
+        $("#result4").empty();
       var rel = $( this ).text().replace("properties", "").replace(/[^a-zA-Z ]/g, "");
           ajaxForRel(rel);
        });
@@ -52,7 +58,12 @@ function countRel(rel){
     $(document).ready(function(){
       $("#result").on("click", "button.relPropertiesValues", function(){
        console.log("relPropertiesValues running");
+       $('#result4').parent().addClass("grid-item result4GridItem") ;
+           $(this).siblings().removeClass("buttonpressed") ;
+           $(this).addClass("buttonpressed") ;
        $("#result2").empty();
+       $("#result4").empty();
+       $("#theTable").empty();
       var prop = $( this ).text();
           ajaxForRelValues(prop); //relationship/propertiesvalues/rank
        });
@@ -62,9 +73,13 @@ function countRel(rel){
        $(document).ready(function(){
           $("#result2").on("click", "button.relativeNodes", function(){
                 console.log("relativeNodes running");
-               $("#result").empty();
-              var rel = $( this ).text().replace("involved nodes", "").replace(/[&\/\\#,+()$~%.'":*?<>{}]/g, "");
-              alert(rel);
+            $(this).siblings().removeClass("buttonpressed") ;
+            $(this).addClass("buttonpressed") ;
+       //        $("#result").empty();
+               $("#result4").empty();
+                 $( ".selectLabel" ).remove();
+                 $("<label>select: </label>" ).addClass("selectLabel").appendTo( $("#result4"));              var rel = $( this ).text().replace("involved nodes", "").replace(/[&\/\\#,+()$~%.'":*?<>{}]/g, "");
+              //alert(rel);
 
               ajaxForNodesRel(rel);
 
@@ -74,7 +89,8 @@ function countRel(rel){
  // all instances of relationship button onclick TO FIX
         $(document).ready(function(){
             $("#allTypeRel").click(function(){
-
+           $(this).siblings().removeClass("buttonpressed") ;
+           $(this).addClass("buttonpressed") ;
              $("#result").empty();
             var rel = $( "#relationshipsReturned option:selected" ).text();
                    $.ajax({
@@ -149,7 +165,7 @@ function ajaxForRel(rel){
                     $( "<div/>", {
                       "class": "my-new-list",
                       html: items.join( "" )
-                    }).appendTo( "#result" );
+                    }).appendTo( "#result4" );
            }
        });
 
@@ -221,7 +237,7 @@ function ajaxForNodesRel(rel){
                 $( "<div/>", {
                   "class": "my-new-list",
                   html: items.join( "" )
-                }).appendTo( "#result" );
+                }).appendTo( "#result4" );
 
            }
        });

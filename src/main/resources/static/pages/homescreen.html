@@ -15,6 +15,7 @@
         <script src="../scripts/relationships.js"></script>
         <script src="../scripts/properties.js"></script>
         <script src="../scripts/schema.js"></script>
+        <script src="../scripts/visualization.js"></script>
 <!--        <script src="../scripts/main.js"></script>-->
     </head>
     <body>
@@ -80,6 +81,9 @@
           <div >
               <div id="result2"></div>
           </div>
+          <div>
+              <div id="result4"></div>
+          </div>
       </div>
 
         <div id="result3"></div>
@@ -89,6 +93,30 @@
         <div id="theTable2"></div>
 
         <div id="viz"></div>
+
+    <!-- The Modal for schema visualization -->
+    <div id="myModal0" class="modal0">
+        <!-- Modal content -->
+        <div class="modal-content0">
+            <span class="close0">&times;</span>
+            <p>DB Schema</p>
+            <div id="vizModal0"></div>
+        </div>
+
+    </div>
+
+    <!-- The Modal for selected relationship visualization -->
+    <div id="myModal" class="modal">
+        <!-- Modal content -->
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <p>Visualised relationships</p>
+            <div id="vizModal"></div>
+        </div>
+
+    </div>
+
+
 
     </body>
 

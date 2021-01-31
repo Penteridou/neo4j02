@@ -182,9 +182,10 @@ public class NodeController<T> { // GenericController
 
     @GetMapping("/property/propertyOfnode/{node}/{prop}/{value}")
     public Object getPropOfNode(@PathVariable String prop,@PathVariable String node,@PathVariable String value){
-        if(node.equals('0')){return  nodeService.getPropOfNode(node,prop,value);
-        }else{
+        if(node.equals("noNodeValue")){
             return  nodeService.getPropOfNodeLabel(prop,value);
+        }else{
+            return  nodeService.getPropOfNode(node,prop,value);
         }
     }
 
