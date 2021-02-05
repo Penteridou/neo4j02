@@ -12,7 +12,8 @@
           var rel =$(this).text()
           localStorage.setItem("currentRelationshipType", rel);
           $("#result2").empty();
-          $("#result3").empty();
+          $('#result4').parent().removeClass("grid-item result4GridItem") ;
+          $("#result4").empty();
           $( ".selectLabel" ).remove();
           $("<label>select: </label>" ).addClass("selectLabel").appendTo( $("#result2"));
           $("<button>" + rel + " properties</button>" ).addClass("relProperties").appendTo( $("#result2"));
@@ -56,7 +57,7 @@ function countRel(rel){
 
 // relationship properties button onclick CLASS .relPropertiesValues
     $(document).ready(function(){
-      $("#result").on("click", "button.relPropertiesValues", function(){
+      $("#result, #result4").on("click", "button.relPropertiesValues", function(){
        console.log("relPropertiesValues running");
        $('#result4').parent().addClass("grid-item result4GridItem") ;
            $(this).siblings().removeClass("buttonpressed") ;
@@ -78,7 +79,8 @@ function countRel(rel){
        //        $("#result").empty();
                $("#result4").empty();
                  $( ".selectLabel" ).remove();
-                 $("<label>select: </label>" ).addClass("selectLabel").appendTo( $("#result4"));              var rel = $( this ).text().replace("involved nodes", "").replace(/[&\/\\#,+()$~%.'":*?<>{}]/g, "");
+                 $("<label>select: </label>" ).addClass("selectLabel").appendTo( $("#result4"));
+                 var rel = $( this ).text().replace("involved nodes", "").replace(/[&\/\\#,+()$~%.'":*?<>{}]/g, "");
               //alert(rel);
 
               ajaxForNodesRel(rel);
@@ -158,8 +160,12 @@ function ajaxForRel(rel){
 
                    var items = [];
                     $.each( data, function( key, val ) {
-                     console.log("relProperties data returned: ", val.value)
-                     items.push( "<button class='relPropertiesValues'>" + val.value + "</button>" );
+                         console.log("relProperties data returned: ", val.value)
+
+                       // $("<button>" + val.value + "</button>" ).addClass("relPropertiesValues").appendTo( $("#result4"));
+
+                         items.push(("<button class='relPropertiesValues'>" + val.value + "</button>" ));
+
                     });
 
                     $( "<div/>", {

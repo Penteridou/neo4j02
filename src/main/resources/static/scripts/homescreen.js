@@ -7,7 +7,8 @@
 
     localStorage.setItem("currentNode", '');
     localStorage.setItem("currentProperty", '');
-
+    localStorage.setItem("currentRelationshipType", '');
+    localStorage.setItem("currentRelProperty", '');
   });
 
 $(document).ready(function(){
@@ -50,7 +51,8 @@ $(document).ready(function(){
            localStorage.setItem("currentNode", '');
            localStorage.setItem("currentProperty", '');
            localStorage.setItem("currentRelationshipType", '');
-          var option = $( "#mainList option:selected" ).val(); //option values: shownodes, showrelationshiptypes, showproperties, showschema
+          var option = $( "#mainList option:selected" ).val(); //option values: shownodes, showrelationshiptypes, showproperties,showrelproperties. showschema
+           //   console.log(option);
                 $.ajax({
                     type: 'GET',
                     url: 'http://localhost:8080/' + option,
@@ -58,14 +60,9 @@ $(document).ready(function(){
                     contentType:"application/json",
                     success: function(data){
                         console.log(data);
-                        if(option =="shownodes" ){
-                             $("<label>select node: </label>" ).addClass("selectLabel").appendTo( $("#result"));
-                         }if(option =="showrelationshiptypes" ){
-                             $("<label>select relationship: </label>" ).addClass("selectLabel").appendTo( $("#result"));
-                         }if(option =="showproperties" ){
-                             $("<label>select property: </label>" ).addClass("selectLabel").appendTo( $("#result"));
-                         }
+                             $("<label>select : </label>" ).addClass("selectLabel").appendTo( $("#result"));
                                 for (let nodeTitle in data) {
+                                 console.log(option);
                                    $("<button>" + data[nodeTitle] + " </button>" ).addClass(option).appendTo( $("#result"));
                                 }
                     }

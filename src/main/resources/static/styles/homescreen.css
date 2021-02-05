@@ -311,13 +311,13 @@ form.example::after {
 .close {
   color: #aaaaaa;
   float: right;
-  font-size: 28px;
+  font-size: 40px;
   font-weight: bold;
 }
 
 .close:hover,
 .close:focus {
-  color: #000;
+  color: red;
   text-decoration: none;
   cursor: pointer;
 }
@@ -350,13 +350,13 @@ form.example::after {
 .close0 {
   color: #aaaaaa;
   float: right;
-  font-size: 28px;
+  font-size: 40px;
   font-weight: bold;
 }
 
 .close0:hover,
 .close0:focus {
-  color: #000;
+  color: red;
   text-decoration: none;
   cursor: pointer;
 }

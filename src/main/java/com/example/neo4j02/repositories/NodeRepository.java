@@ -57,14 +57,17 @@ public interface NodeRepository<T> extends Neo4jRepository<T, Long> {
     Collection<Object> callSchema();
 
 
-    //get properties (names)
+    //get node properties (names)
     @Query("match (n) \n" +
             "with keys(n) as nested\n" +
             "unwind nested as x\n" +
             "return distinct x\n")
     Collection<Object> getAllProperties();
 
-
+  //get relationship properties (names)
+  @Query("MATCH ()-[r]-() with keys(r) as nested unwind nested as x\n" +
+          "return distinct x")
+  Collection<Object> getAllRelProperties();
 
 
 

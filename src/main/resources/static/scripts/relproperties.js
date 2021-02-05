@@ -1,8 +1,8 @@
 
-//load properties buttons according to the clicked property and add classes
+//load rel properties buttons according to the clicked property and add classes
 $(document).ready(function(){
-  $("#result, #result4").on("click", "button.showproperties", function(){ //DELEGATION
-  console.log("showproperties running");
+  $("#result, #result4").on("click", "button.showrelproperties", function(){ //DELEGATION
+  console.log("showrelproperties running");
    $("#result2").empty();
   $('#result2').parent().addClass("grid-item result2GridItem") ;
   $(this).siblings().removeClass("buttonpressed") ;
@@ -12,40 +12,40 @@ $(document).ready(function(){
   $("<label>select: </label>" ).addClass("selectLabel").appendTo( $("#result2"));
     //store
    var prop =  $(this).text();
-   localStorage.setItem("currentProperty", prop);
-   console.log("current prop = ", prop);
+   localStorage.setItem("currentRelProperty", prop);
+   console.log("current rel prop = ", prop);
       //alert("rel");
      // $("<button>" + $(this).text() + "property nodes' relationships</button>" ).addClass("propNodeRelationships").appendTo( $("#result2"));
 
-      $("<button>" + prop + " property involved nodes</button>" ).addClass("propNodes").appendTo( $("#result2"));
-      if(localStorage.getItem("currentNode")!=""){
-         $("<button>" + prop+ " property of "+localStorage.getItem("currentNode")+" node</button>" ).addClass("propOfCurrentNode").appendTo( $("#result2"));
+      $("<button>" + prop + " relationship property involved relationships</button>" ).addClass("relpropNodes").appendTo( $("#result2"));
+      if(localStorage.getItem("currentRelationshipType")!=""){
+         $("<button>" + prop+ "relationship property of "+localStorage.getItem("currentRelationshipType")+" relationship</button>" ).addClass("relpropOfCurrentNode").appendTo( $("#result2"));
       }
-      countProp(prop);
+      countRelProp(prop);
   });
 });
 
 
-  //count prop instances
-  function countProp(prop){
+  //count rel prop instances
+  function countRelProp(prop){
      $.ajax({
           type: 'GET',
-          url: 'http://localhost:8080/property/count/' + prop,
+          url: 'http://localhost:8080/relproperty/count/' + prop,
           dataType : "json",
           contentType:"application/json",
           success: function(data){
               console.log(data);
               var val= JSON.stringify(data).replace("value\":", "").replace(/[&\/\\#+()$~%'"*?<>{}]/g, '');
-              $("<label>There are " + val +" instances of node "+prop+"  </label>" ).addClass("counterLabel").attr("value", $(this).text()).appendTo( $("#result3"));
+              $("<label>There are " + val +" instances of relationship property "+prop+" </label>" ).addClass("counterLabel").attr("value", $(this).text()).appendTo( $("#result3"));
           }
       });
 
   }
 
 
-// properties' involved nodes buttons onclick, CLASS .propNodes
+// rel properties' involved nodes buttons onclick, CLASS .relpropNodes
    $(document).ready(function(){
-      $("#result2").on("click", "button.propNodes", function(){
+      $("#result2").on("click", "button.relpropNodes", function(){
            $(this).siblings().removeClass("buttonpressed") ;
            $(this).addClass("buttonpressed") ;
            $("#result4").empty();
@@ -54,10 +54,10 @@ $(document).ready(function(){
               $("<label>select: </label>" ).addClass("selectLabel").appendTo( $("#result4"));
       console.log("propNodes running?");
    //    $("#result").empty();
-      var prop = $( this ).text().replace("property involved nodes", "").replace(/[^a-zA-Z ]/g, "");
+      var prop = $( this ).text().replace(" relationship property involved relationships", "").replace(/[^a-zA-Z ]/g, "");
              $.ajax({
                   type: 'GET',
-                  url: 'http://localhost:8080/property/nodes/' + prop,
+                  url: 'http://localhost:8080/relproperty/rel/'+ prop,
                   dataType : "json",
                   contentType:"application/json",
                   success: function(data){
@@ -66,7 +66,7 @@ $(document).ready(function(){
                            $.each( data, function( key, val ) {
                            console.log("val:",JSON.stringify(val));
                             var value = JSON.stringify(val).replace("value", "").replace(/[^a-zA-Z ]/g, "");
-                             items.push( "<button class='shownodes'>" + value + "</button>" );
+                             items.push( "<button class='showrelationshiptypes '>" + value + "</button>" );
                            });
 
                            $( "<div/>", {
@@ -78,9 +78,9 @@ $(document).ready(function(){
       });
     });
 
-// property values of current node  : SHOW TABLE WITH THE PROPERTY
+// rel property values of current node  : SHOW TABLE WITH THE rel PROPERTY
       $(document).ready(function(){
-          $("#result2").on("click", "button.propOfCurrentNode", function(){
+          $("#result2").on("click", "button.relpropOfCurrentNode", function(){
            console.log("propOfCurrentNode running");
            $(this).siblings().removeClass("buttonpressed") ;
            $(this).addClass("buttonpressed") ;
@@ -93,7 +93,7 @@ $(document).ready(function(){
               console.log("node=", node);
                  $.ajax({
                       type: 'GET',
-                      url: 'http://localhost:8080/property/propertyOfnode/'+ node +'/' +prop,
+                      url: 'http://localhost:8080/relproperty/propertyOfrel/'+ rel +'/' +prop,
                       dataType : "json",
                       contentType:"application/json",
                       success: function(data){

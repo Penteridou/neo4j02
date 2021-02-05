@@ -119,7 +119,7 @@ public class NodeService extends GenericService<Object> {
     //COUNT a property total
     public Result getPropCount(String prop){
         Map<String,Object> params = new HashMap<>();
-        String query="MATCH (n) WHERE EXISTS(n." + prop + ") RETURN count(n)";
+        String query="MATCH (n) WHERE EXISTS(n." + prop + ") RETURN count(n) as value";
         return Neo4jSessionFactory.getInstance().getNeo4jSession().query(query,params);
     }
 
@@ -199,6 +199,33 @@ public class NodeService extends GenericService<Object> {
                     "        return distinct b as info";
             return Neo4jSessionFactory.getInstance().getNeo4jSession().query(query, params);
         }
+    }
+
+    //------------------EXPLORE RELATIONSHIP PROPERTIES---------------------------------------------------------------------------------
+
+    //COUNT a property total
+    public Result getRelPropCount(String prop){
+        Map<String,Object> params = new HashMap<>();
+        String query="MATCH ()-[r]-() WHERE EXISTS(r." + prop + ") RETURN count(r) as value";
+        return Neo4jSessionFactory.getInstance().getNeo4jSession().query(query,params);
+    }
+
+    //return a rel property relationship
+    public Result getRelPropRel(String prop){
+        System.out.println(prop);
+        Map<String,Object> params = new HashMap<>();
+        String query="MATCH ()-[r]-() WHERE EXISTS(r." + prop + ") RETURN distinct type(r) as value";
+        return Neo4jSessionFactory.getInstance().getNeo4jSession().query(query,params);
+    }
+
+    public Result getRelPropOfRel(String prop,String value){
+        System.out.println("value of property of a nodeLabel: "+prop+" "+value);
+        Map<String,Object> params = new HashMap<>();
+        String query;
+        query="MATCH (n)  WHERE n." + prop + "  =~ '(?i).*" + value + ".*'\n" +
+                "return n as info,labels(n) as Node label";
+
+        return Neo4jSessionFactory.getInstance().getNeo4jSession().query(query,params);
     }
 
     //------------------EXPLORE SCHEMA ---------------------------------------------------------------------------------
