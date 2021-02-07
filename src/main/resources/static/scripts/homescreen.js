@@ -120,6 +120,7 @@ $(document).ready(function(){
                                     dataType : "text",
                                     contentType:"application/json",
                                     success: function(data){
+                                    console.log(data);
                                         keywordMap.set(keywordsArray[index], data);
                                        // keywordTypesArray[index]=data;
                                        // console.log("keywordTypesArray[index] took any value?",keywordTypesArray[index] );
@@ -551,50 +552,97 @@ function AjaxTwoValuesSearchCase(value1,value2){
           });
 }
 
+
+function AjaxSingleValueSearchCaseRelProp (keyword){
+
+                   console.log ("try for rel property values ")
+                       $.ajax({
+                                         type: 'GET',
+                                         url: 'http://localhost:8080/search/relprop/'+ keyword,
+                                         dataType : "json",
+                                         contentType:"application/json",
+                                         success: function(data){
+
+                                                 console.log("relProp data ",data);
+
+                var table = $('<table>').addClass('resultTable');
+                $.each( data, function( key, val ) {
+                    //console.log("stringify:",JSON.stringify(val)); //.replace("{\"value\":", "").replace(/\}}/g, "}"));
+                   // console.log("name",val.value.name);
+                    var items = [];
+                    var value = JSON.stringify(val).replace("type(r)\":", "").replace(/[&\/\\#+()$~%'"*?<>{}]/g, '');
+                    var arr = value.split(',');
+                    console.log("check json: ", arr);
+                    for (let i = 0; i < arr.length; ++i) {
+                        //  alert(arr[i]);
+                        items.push( "<td>" + arr[i] + "</td>" );
+                    }
+
+                    var row = $('<tr>').addClass('bar').append(items.join(""));
+                    //console.log("btn id is:", val.value.id);
+                    table.append(row);
+                    //  items.push( "<label>next-----------</label>" );
+
+                });
+                $(table).appendTo($('#theTable2'));//.attr("id",'theTable').insertAfter( ".box2" ));
+
+
+                                         } //success function ok
+                                   });
+
+}
 function AjaxSingleValueSearchCase (keyword){
+
     $.ajax({
                       type: 'GET',
                       url: 'http://localhost:8080/search/' + keyword,
                       dataType : "json",
                       contentType:"application/json",
                       success: function(data){
-                          console.log(data);
-                          var items = [];
-                          var table = $('<table>').addClass('resultTable');
-                           $.each( data, function( key, val ) { //check the value title from the query result to figure out what it is , example: ("shownodes":"Book")
-                              var value = JSON.stringify(val);// .replace("value", "").replace(/[&\/\\#,+()$~%.'":*?<>{}]/g, '');
-                              console.log("the initial value is: "+value);
-                              var resultType = value.split(/"(.+)/)[1].split(/"(.+)/)[0]; //resultType value: shownodes||showproperties||showrelationshiptypes||NodeLabel
-                              //check result type in order to proceed
-                              console.log("result type is: "+resultType);
-                              if(resultType=="NodeLabel") { // the keyword is a property value (NodeValue is returned when the property value query runs)
-                                console.log("NodeLabel details ")
-                                    var items = [];
-                                    var value = JSON.stringify(val).replace("info\":", "").replace(/[&\/\\#+()$~%'"*?<>{}]/g, '');
-                                    var arr = value.split(',');
-                                    console.log("check json: ", arr);
-                                    for (let i = 0; i < arr.length; ++i) {
-                                         if(!arr[i].endsWith("null")){
-                                            items.push( "<td>" + arr[i] + "</td>" );
-                                         }
-                                    }
-                                   // var btn= $( "<button>check relationships</button>").addClass("checkRelBtn").attr("id",val.value.id);
-                                    var row = $('<tr>').addClass('bar').append(items.join("")); //.append(btn);
-                                    //console.log("btn id is:", val.value.id);
-                                    table.append(row);
+                              if(data.length==0){
+                                AjaxSingleValueSearchCaseRelProp (keyword)
+                              }
+                              console.log(data.length);
+                              var items = [];
+                              var table = $('<table>').addClass('resultTable');
+                               $.each( data, function( key, val ) { //check the value title from the query result to figure out what it is , example: ("shownodes":"Book")
+                                  var value = JSON.stringify(val);// .replace("value", "").replace(/[&\/\\#,+()$~%.'":*?<>{}]/g, '');
+                                  console.log("the initial value is: "+value);
+                                  var resultType = value.split(/"(.+)/)[1].split(/"(.+)/)[0]; //resultType value: shownodes||showproperties||showrelationshiptypes||showrelproperties||NodeLabel
+                                  //check result type in order to proceed
+                                  console.log("result type is: "+resultType);
+                                  if(resultType=="NodeLabel") { // the keyword is a property value (NodeValue is returned when the property value query runs)
+                                    console.log("NodeLabel details ")
+                                        var items = [];
+                                        var value = JSON.stringify(val).replace("info\":", "").replace(/[&\/\\#+()$~%'"*?<>{}]/g, '');
+                                        var arr = value.split(',');
+                                        console.log("check json: ", arr);
+                                        for (let i = 0; i < arr.length; ++i) {
+                                             if(!arr[i].endsWith("null")){
+                                                items.push( "<td>" + arr[i] + "</td>" );
+                                             }
+                                        }
+                                       // var btn= $( "<button>check relationships</button>").addClass("checkRelBtn").attr("id",val.value.id);
+                                        var row = $('<tr>').addClass('bar').append(items.join("")); //.append(btn);
+                                        //console.log("btn id is:", val.value.id);
+                                        table.append(row);
 
-                              }else{
-                                    //here
-                                $("<button>" + value.split(/"(.+)/)[1].split(/"(.+)/)[1].split(/"(.+)/)[1].split(/"(.+)/)[0]+ " </button>" ).addClass(resultType).appendTo( $("#result"));
-                               }
+                                  }else{
+                                        //here
+                                    $("<button>" + value.split(/"(.+)/)[1].split(/"(.+)/)[1].split(/"(.+)/)[1].split(/"(.+)/)[0]+ " </button>" ).addClass(resultType).appendTo( $("#result"));
+                                   }
 
-                             if(resultType=="NodeLabel"){
-                             $(table).appendTo($( "<div style='overflow-x:auto'>Results</div>" ).insertAfter( ".box2" ));
-                             }else{ table = undefined;  console.log("table deleted");}
+                                 if(resultType=="NodeLabel"){
+                                 $(table).appendTo($( "<div style='overflow-x:auto'>Results</div>" ).insertAfter( ".box2" ));
+                                 }else{ table = undefined;  console.log("table deleted");}
 
-                          });
+                              });
+
                       } //success function ok
+
                 });
+
+
 
 }
 

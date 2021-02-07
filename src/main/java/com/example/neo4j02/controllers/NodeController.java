@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -88,6 +89,12 @@ public class NodeController<T> { // GenericController
     @GetMapping("/search/{keyword}")
     public Object getObject(@PathVariable String keyword) {
         return objectRecognitionService.setParamsAndSearch(keyword);
+    }
+
+    @GetMapping("/search/relprop/{keyword}")
+    public Object getObject2(@PathVariable String keyword) {
+        System.out.println("call for rel property value");
+        return objectRecognitionService.setParamsAndSearchForRelPropertyValue(keyword);
     }
 
     @GetMapping("/search/{keyword}/{keyword2}")

@@ -28,56 +28,78 @@ public class ObjectRecognitionService extends GenericService<Object> {
 
 // THE SEARCH FUNCTION----------------------------------------------------------------------------------------------------------------------
     //entire object(s) N depending on the keyword
-    public Result setParamsAndSearch(String keywordInserted){
-            //ckeck if keywordInserted is any property title
-        System.out.println("keywordInserted: " +keywordInserted);
+    public Result setParamsAndSearch(String keywordInserted) {
+        //ckeck if keywordInserted is any property title
+        System.out.println("keywordInserted: " + keywordInserted);
         keywordInserted = keywordInserted.replaceAll("^\'|\'$", "");
-        if(checkIfKeywordIsAproperty(keywordInserted)){//set params
+        if (checkIfKeywordIsAproperty(keywordInserted)) {//set params
             System.out.println("the keyword is property");
-        Map<String,Object> params = new HashMap<>();
-        params.put( "props",getAllPropertiesListed()); // current properties
-        String query = "unwind $props as prop\n" +
-                "MATCH (n) WHERE prop  =~ '(?i).*"+keywordInserted+".*' \n" +
-                "RETURN  distinct prop as showproperties";
-        return Neo4jSessionFactory.getInstance().getNeo4jSession().query(query, params);
+            Map<String, Object> params = new HashMap<>();
+            params.put("props", getAllPropertiesListed()); // current properties
+            String query = "unwind $props as prop\n" +
+                    "MATCH (n) WHERE prop  =~ '(?i).*" + keywordInserted + ".*' \n" +
+                    "RETURN  distinct prop as showproperties";
+            return Neo4jSessionFactory.getInstance().getNeo4jSession().query(query, params);
 
             //ckeck if keywordInserted is any node title
-        }else if (checkIfKeywordIsAnode(keywordInserted)){
+        } else if (checkIfKeywordIsAnode(keywordInserted)) {
             System.out.println("the keyword is node");
-            Map<String,Object> params = new HashMap<>();
-            params.put( "nodes",getAllNodesListed()); // current node labels
+            Map<String, Object> params = new HashMap<>();
+            params.put("nodes", getAllNodesListed()); // current node labels
             String query =
                     "MATCH (n) \n" +
-                    "unwind  $nodes as node\n" +
-                    "match (n) where node=~ '(?i).*"+keywordInserted+".*' \n" +
-                    "RETURN  distinct node as shownodes ";
+                            "unwind  $nodes as node\n" +
+                            "match (n) where node=~ '(?i).*" + keywordInserted + ".*' \n" +
+                            "RETURN  distinct node as shownodes ";
             return Neo4jSessionFactory.getInstance().getNeo4jSession().query(query, params);
-        //check if keywordInserted is any relationship type title
-        }else if (checkIfKeywordIsArel(keywordInserted)){
+            //check if keywordInserted is any relationship type title
+        } else if (checkIfKeywordIsArel(keywordInserted)) {
             System.out.println("the keyword is Rel");
-            Map<String,Object> params = new HashMap<>();
-            params.put( "rel",getAllRelTypesListed()); // current rel types
+            Map<String, Object> params = new HashMap<>();
+            params.put("rel", getAllRelTypesListed()); // current rel types
             String query =
                     "MATCH (a)-[r]-(b) \n" +
-                    "WHERE type(r)=~ '(?i).*"+keywordInserted+"*'\n" +
-                    "RETURN distinct type(r) as showrelationshiptypes ";
+                            "WHERE type(r)=~ '(?i).*" + keywordInserted + "*'\n" +
+                            "RETURN distinct type(r) as showrelationshiptypes ";
+            return Neo4jSessionFactory.getInstance().getNeo4jSession().query(query, params);
+            //check if keywordInserted is any relationship property title
+        } else if (checkIfKeywordIsArelProperty(keywordInserted)) {
+            System.out.println("the keyword is RelProp");
+            Map<String, Object> params = new HashMap<>();
+            params.put("relprop", getAllRelPropListed()); // current rel prop
+            String query =
+                    "unwind $relprop as prop\n" +
+                            "MATCH (n) WHERE  prop  =~ '(?i).*" + keywordInserted + "*'\n" +
+                            "RETURN  distinct prop as showrelproperties";
             return Neo4jSessionFactory.getInstance().getNeo4jSession().query(query, params);
 
-        }else {  //if keyword matches a property value
-            System.out.println("the keyword is property value");
-            Map<String,Object> params = new HashMap<>();
-            params.put("props",getAllPropertiesListed()); // current properties
+        } else {  //if keyword matches a property value
+            System.out.println("the keyword is node property value");
+            Map<String, Object> params = new HashMap<>();
+            params.put("props", getAllPropertiesListed()); // current properties
             String query =
                     "MATCH (n) \n" +
                             "unwind keys(n) as prop\n" +
-                            "MATCH (n) WHERE n[prop]  =~ '(?i).*"+keywordInserted+".*'\n" +
+                            "MATCH (n) WHERE n[prop]  =~ '(?i).*" + keywordInserted + ".*'\n" +
                             "RETURN labels(n) as NodeLabel, n as info";
+            System.out.println("the keyword is node property value");
             return Neo4jSessionFactory.getInstance().getNeo4jSession().query(query, params);
-
-        }// else System.out.println("fail  " +getAllRelTypesListed().toString()); return null;
-
-
+        }
     }
+
+        public Result setParamsAndSearchForRelPropertyValue(String keywordInserted){
+                Map<String,Object> params = new HashMap<>();
+                params.put("relprops",getAllRelPropListed()); // current rel properties
+                 String query ="unwind $relprops as prop\n" +
+                        "MATCH ()-[r]-() WHERE  r[prop]  =~ '(?i).*"+keywordInserted+".*'\n" +
+                        "RETURN  distinct prop as RelPropValue, r[prop] as prop,  labels(startNode(r)) as starter_node,type(r),labels(endNode(r)) as endNode";
+                    System.out.println("the keyword is rel property value");
+                    return Neo4jSessionFactory.getInstance().getNeo4jSession().query(query, params);
+            }
+
+
+
+
 
     public Result setParamsAndSearch(String keywordInserted1,String keywordInserted2){
         System.out.println("the keywords are property value");
@@ -138,12 +160,14 @@ public class ObjectRecognitionService extends GenericService<Object> {
     public String getKeywordType(String keyword){
         System.out.println("getKeywordType method runs, keyword is "+ keyword);
         String type ="";
-        if(getAllPropertiesListed().contains(keyword)){
+        if(checkIfKeywordIsAproperty(keyword)){
             type= "showproperties";
         }else if(checkIfKeywordIsAnode(keyword)){
             type= "shownodes";
         }else if(checkIfKeywordIsArel(keyword)){
             type= "showrelationshiptypes";
+        }else if(checkIfKeywordIsArelProperty(keyword)){
+            type= "showrelproperties";
         }else
             type= "NodeLabel";
         System.out.println("the type is:" +type);
@@ -167,7 +191,11 @@ public class ObjectRecognitionService extends GenericService<Object> {
             return true;
         return false;
     }
-
+    public boolean checkIfKeywordIsArelProperty(String keyword){
+        if(getAllRelPropListed().contains(keyword))
+            return true;
+        return false;
+    }
 
 
     //object Label
@@ -200,7 +228,8 @@ public class ObjectRecognitionService extends GenericService<Object> {
     }
     // retrieve all relationship types from repository
     public  Collection<Object> getAllRelTypesListed(){return nodeRepository.showRelTypes(); }
-
+    // retrieve all relationship properties from repository
+    public  Collection<Object> getAllRelPropListed(){return nodeRepository.getAllRelProperties(); }
 
     //set properties as parameters and search based on them
     public Result setParamsAndSearchPropertyEntity(String keywordInserted) {
