@@ -325,7 +325,7 @@ function keywordMapHandling(keywordMap){
         var allNodesFlag = {found:false,key: [],counter:0};
         var allPropFlag= {found:false,key: [],counter:0};
         var allRelFlag = {found:false,key: [],counter:0};
-
+        var relPropFlag = {found:false,key: [],counter:0};
         console.log('size ',keywordMap.size);
 
              for (const [key, value] of keywordMap.entries()) {
@@ -347,6 +347,10 @@ function keywordMapHandling(keywordMap){
                     relFlag.key[relFlag.counter]=key;
                     relFlag.counter++;
 
+                }else if(value=="showrelproperties"){
+                                     relPropFlag.found=true;
+                                     relPropFlag.key[relPropFlag.counter]=key;
+                                     relPropFlag.counter++;
                 }else if(value=="nodes"){
                      allNodesFlag.found=true;
                      allNodesFlag.key[allNodesFlag.counter]=key;
@@ -405,6 +409,14 @@ function keywordMapHandling(keywordMap){
                  }else if( nodeFlag.found==true&&allRelFlag.found==true ){ //Book relationships
                       ajaxAllrelTypesOf(nodeFlag.key[0]);
                       console.log("all rel of node case");
+
+                 }else if( relFlag.found==true&&allPropFlag.found==true ){ //WROTE relationships
+                    ajaxAllrelpropertiesOf(relPropFlag.key[0]);//
+                    console.log("all prop rel of rel case");
+
+                 }else if( relFlag.found==true&&allPropFlag.found==true ){ //WROTE location
+                  //................................................
+                  console.log("rel&relprop case");
 
                  }else if(otherFlag.found==true&&otherFlag.counter==2){ //ex. Rowling Potter
                       console.log('two values case');

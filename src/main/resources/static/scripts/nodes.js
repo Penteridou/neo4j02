@@ -388,7 +388,6 @@ function  ajaxAllpropertiesOf(node) {
                   var items = [];
                    $.each( data, function( key, val ) {
                    var test = JSON.stringify(val);
-                   console.log("textttt", test);
                   //var value = JSON.stringify(val).replace("value", "").replace(/[^a-zA-Z ]/g, ""); // remove 'value:' from the json value part
                    //console.log("sliced", value);
 

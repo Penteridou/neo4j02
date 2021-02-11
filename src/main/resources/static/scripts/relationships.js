@@ -249,3 +249,34 @@ function ajaxForNodesRel(rel){
        });
 
 }
+
+
+function  ajaxAllrelpropertiesOf(rel) {
+
+        $.ajax({
+                  type: 'GET',
+                  url: 'http://localhost:8080/relationship/properties/' + rel,
+                  dataType : "json",
+                  contentType:"application/json",
+                  success: function(data){
+                      console.log(data);
+                          var items = [];
+                           $.each( data, function( key, val ) {
+                           var test = JSON.stringify(val);
+                          //var value = JSON.stringify(val).replace("value", "").replace(/[^a-zA-Z ]/g, ""); // remove 'value:' from the json value part
+                           //console.log("sliced", value);
+
+                             items.push( "<button class='showrelproperties'" + JSON.stringify(key) + "'>" + val.value + "</button>" );
+                           });
+
+                           $( "<div/>", {
+                             "class": "my-new-list",
+                             html: items.join( "" )
+                           }).appendTo( "#result4" );
+                  }
+              });
+
+
+
+
+}
