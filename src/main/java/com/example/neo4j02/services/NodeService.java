@@ -154,7 +154,7 @@ public class NodeService extends GenericService<Object> {
         return Neo4jSessionFactory.getInstance().getNeo4jSession().query(query,params);
     }
 
-    public Result getPropOfNode(String node, String prop,String value){
+    public Result getVelueOfPropOfNode(String node, String prop,String value){
         System.out.println("value of property of a node: "+prop+" "+node+" "+value);
         Map<String,Object> params = new HashMap<>();
         String query;
@@ -164,7 +164,7 @@ public class NodeService extends GenericService<Object> {
         return Neo4jSessionFactory.getInstance().getNeo4jSession().query(query,params);
     }
 
-    public Result getPropOfNodeLabel(String prop,String value){
+    public Result getVelueOfProp(String prop,String value){
         System.out.println("value of property of a nodeLabel: "+prop+" "+value);
         Map<String,Object> params = new HashMap<>();
         String query;
@@ -218,15 +218,36 @@ public class NodeService extends GenericService<Object> {
         return Neo4jSessionFactory.getInstance().getNeo4jSession().query(query,params);
     }
 
-    public Result getRelPropOfRel(String prop,String value){
-        System.out.println("value of property of a nodeLabel: "+prop+" "+value);
+    public Result getRelPropOfRel(String rel,String prop){  //ex. WROTE location
+        System.out.println("rel property of a relationship: "+rel+" "+prop);
         Map<String,Object> params = new HashMap<>();
         String query;
-        query="MATCH (n)  WHERE n." + prop + "  =~ '(?i).*" + value + ".*'\n" +
-                "return n as info,labels(n) as Node label";
+        query="MATCH (n)-[r:"+rel+"]->(m) WHERE EXISTS(r." + prop + ") RETURN DISTINCT r." + prop + " as value";
 
         return Neo4jSessionFactory.getInstance().getNeo4jSession().query(query,params);
     }
+
+    public Result getVelueOfRelProp(String prop,String value){  //ex. location France
+        System.out.println("value of rel property: "+prop+" "+value);
+        Map<String,Object> params = new HashMap<>();
+        String query;
+        query="MATCH ()-[r]-()  WHERE r." + prop + "  =~ '(?i).*"+value+".*'"+
+                "return distinct type(r) as relType , r." + prop + " as " + prop + "";
+
+        return Neo4jSessionFactory.getInstance().getNeo4jSession().query(query,params);
+    }
+
+    public Result getVelueOfRelPropOfRel(String rel, String prop,String value){  //ex. WROTE location France
+        System.out.println("value of rel property of a REL: "+prop+" " +prop+" " +value);
+        Map<String,Object> params = new HashMap<>();
+        String query;
+        query="MATCH ()-[r:"+rel+" ]-()  WHERE r." + prop + "  =~ '(?i).*"+value+".*'"+
+                "return distinct type(r) as relType , r." + prop + " as " + prop + "";
+
+        return Neo4jSessionFactory.getInstance().getNeo4jSession().query(query,params);
+    }
+
+
 
     //------------------EXPLORE SCHEMA ---------------------------------------------------------------------------------
 

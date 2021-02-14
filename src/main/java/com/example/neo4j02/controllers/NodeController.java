@@ -229,9 +229,9 @@ public class NodeController<T> { // GenericController
     @GetMapping("/property/propertyOfnode/{node}/{prop}/{value}")
     public Object getPropOfNode(@PathVariable String prop, @PathVariable String node, @PathVariable String value) {
         if (node.equals("noNodeValue")) {
-            return nodeService.getPropOfNodeLabel(prop, value);
+            return nodeService.getVelueOfProp(prop, value);
         } else {
-            return nodeService.getPropOfNode(node, prop, value);
+            return nodeService.getVelueOfPropOfNode(node, prop, value);
         }
     }
 
@@ -252,8 +252,17 @@ public class NodeController<T> { // GenericController
     }
 
     @GetMapping("/relproperty/propertyOfrel/{rel}/{prop}")
-    public Object getRelPropOfRel(@PathVariable String prop, @PathVariable String rel) {
+    public Object getRelPropOfRel(@PathVariable String rel, @PathVariable String prop) {
         return nodeService.getRelPropOfRel(rel, prop);
+    }
+
+    @GetMapping("/relproperty/propertyOfRel/{rel}/{prop}/{value}")
+    public Object getRelPropOfRel(@PathVariable String rel, @PathVariable String prop, @PathVariable String value) {
+        if (rel.equals("noRelValue")) {
+            return nodeService.getVelueOfRelProp(prop, value);
+        } else {
+            return nodeService.getVelueOfRelPropOfRel(rel, prop, value);
+        }
     }
 
 } //end of class

@@ -171,7 +171,26 @@ $(document).ready(function(){
                     //console.log("btn id is:", val.value.id);
                     table.append(row);
                 });
-                $(table).appendTo($('#theTable2'));//.attr("id",'theTable').insertAfter( ".box2" ));
+
+                //MODAL DISPLAY---------------------------------------------
+                // Get the modal
+                var modal = document.getElementById("myModal3");
+                modal.style.display = "block";
+                //MODAL HANDLING
+                // When the user clicks on <span> (x), close the modal
+                var span = document.getElementsByClassName("close3")[0];
+                 span.onclick = function() {
+                   modal.style.display = "none";
+                 }
+
+                 // When the user clicks anywhere outside of the modal, close it
+                 window.onclick = function(event) {
+                   if (event.target == modal) {
+                     modal.style.display = "none";
+                   }
+                }
+                $('#vizModal3').empty();
+                $(table).appendTo($('#vizModal3'));//.attr("id",'theTable').insertAfter( ".box2" ));
 
               }
           });
