@@ -106,7 +106,7 @@ $(document).ready(function(){
 //check specific node relationships button , based on clicked button id (same as node id)---> CHECKRELBUTTON
 $(document).ready(function(){
     $('#theTable').on("click", "button.checkRelBtn", function(){
-        alert("checkRelBtn works!");
+       // alert("checkRelBtn works!");
         $('#theTable2').empty();
         $('#viz').empty();
         console.log("button id:", $(this).attr("id")); //clicked button id
@@ -190,6 +190,8 @@ $(document).ready(function(){
                    }
                 }
                 $('#vizModal3').empty();
+                document.getElementById("myModal").style.display = "none";
+
                 $(table).appendTo($('#vizModal3'));//.attr("id",'theTable').insertAfter( ".box2" ));
 
               }
@@ -304,6 +306,7 @@ var span = document.getElementsByClassName("close")[0];
 
  // When the user clicks anywhere outside of the modal, close it
  window.onclick = function(event) {
+   document.getElementById("myModal3").style.display = "none";
    if (event.target == modal) {
      modal.style.display = "none";
    }
