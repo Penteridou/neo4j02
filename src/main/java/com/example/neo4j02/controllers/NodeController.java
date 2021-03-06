@@ -197,6 +197,11 @@ public class NodeController<T> { // GenericController
         return nodeService.getInvolvedNodes(rel);
     }
 
+    //return the relationships of a value
+    @GetMapping("/relationship/relOfValue/{rel}/{value}")
+    public Object getRelOfValue(@PathVariable String rel,@PathVariable  String value) {
+        return nodeService.getRelOfValue(rel,value);
+    }
     //-------------------- EXPLORE NODE PROPERTIES----------------------------------------------------------------------------------------
 
     //count properties

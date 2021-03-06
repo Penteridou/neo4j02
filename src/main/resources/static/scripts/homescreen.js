@@ -25,14 +25,13 @@ $(document).ready(function(){
 
 $(document).ready(function(){
    $("#import").click(function(){
+   alert("import");
           $.ajax({
               type: 'GET',
               url: 'http://localhost:8080/importschema',
               dataType : "json",
               contentType:"application/json",
-              success: function(data){
-                    alert("imported");
-              }
+              success: function(data){}
           });
     });
 });
@@ -80,6 +79,8 @@ $(document).ready(function(){
         console.log("wordsCounter ",wordsCounter);
         $("#result").empty();
         $("#result2").empty();
+        $("#result3").empty();
+        $("#result4").empty();
         $('#mainList').val('none');
         localStorage.setItem("currentNode", '');
         localStorage.setItem("currentProperty", '');
@@ -443,6 +444,10 @@ function keywordMapHandling(keywordMap){
                   }else if( relFlag.found==true&&relPropFlag.found==true ){ //WROTE location
                   console.log("rel&relprop case");
                   AjaxRelAndRelPropSearchCase(relFlag.key[0] , relPropFlag.key[0]);
+
+                 }else if( relFlag.found==true&&otherFlag.found==true ){ //WROTE Potter
+                                    console.log("rel&value case TO ADD");
+                                   ajaxForRelValue(relFlag.key[0],otherFlag.key[0]);
 
                  }else if(otherFlag.found==true&&otherFlag.counter==2){ //ex. Rowling Potter
                       console.log('two values case');
@@ -836,6 +841,48 @@ function ajaxForRelPropValue(rel,relprop,value){
                }
            });
 }
+
+function ajaxForRelValue(rel,value){
+     $.ajax({
+                   type: 'GET',
+                   url: 'http://localhost:8080/relationship/relOfValue/'+ rel +'/'+value,
+                   dataType : "json",
+                   contentType:"application/json",
+                   success: function(data){
+                    console.log("data: "+data);
+
+                              console.log(data);
+                              var items = [];
+                              var table = $('<table>').addClass('resultTable');
+                               $.each( data, function( key, val ) { //check the value title from the query result to figure out what it is , example: ("shownodes":"Book")
+                                  var value = JSON.stringify(val);// .replace("value", "").replace(/[&\/\\#,+()$~%.'":*?<>{}]/g, '');
+                                  console.log("the initial value is: "+value);
+
+                                        var items = [];
+                                        var value = JSON.stringify(val).replace("info\":", "").replace(/[&\/\\#+()$~%'"*?<>{}]/g, '');
+                                        var arr = value.split(',');
+                                        console.log("check json: ", arr);
+                                        for (let i = 0; i < arr.length; ++i) {
+                                             if(!arr[i].endsWith("null")){
+                                                items.push( "<td>" + arr[i] + "</td>" );
+                                             }
+                                        }
+                                       // var btn= $( "<button>check relationships</button>").addClass("checkRelBtn").attr("id",val.value.id);
+                                        var row = $('<tr>').addClass('bar').append(items.join("")); //.append(btn);
+                                        //console.log("btn id is:", val.value.id);
+                                        table.append(row);
+
+                                 $(table).appendTo($( "<div style='overflow-x:auto'></div>" ).insertAfter( ".box2" ));
+
+
+                              });
+                   }
+               });
+
+
+
+}
+
 
 
 function clearResults(){

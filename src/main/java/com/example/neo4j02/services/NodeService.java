@@ -125,7 +125,20 @@ public class NodeService extends GenericService<Object> {
         return Neo4jSessionFactory.getInstance().getNeo4jSession().query(query,params);
     }
 
+    public Result getRelOfValue(String rel,String value){
+        System.out.println("relationship of specific value: "+rel+" "+value);
+        rel = rel.toUpperCase();
+        Map<String,Object> params = new HashMap<>();
+        String query;
+        query="MATCH (n)-[r:"+rel+"]-(m)  unwind keys(n) as prop\n" +
+                "                   with prop as p,r,m\n" +
+                "                 match (n)\n" +
+                "                   where n[p]=~ '(?i).*" + value + ".*'\n" +
+                "                MATCH (n)-[r:"+rel+"]-(m) \n" +
+                "                     return distinct m as relatedNode";
 
+        return Neo4jSessionFactory.getInstance().getNeo4jSession().query(query,params);
+    }
 
     //------------------EXPLORE PROPERTIES---------------------------------------------------------------------------------
 
@@ -219,6 +232,7 @@ public class NodeService extends GenericService<Object> {
             return Neo4jSessionFactory.getInstance().getNeo4jSession().query(query, params);
         }
     }
+
 
     //------------------EXPLORE RELATIONSHIP PROPERTIES---------------------------------------------------------------------------------
 
