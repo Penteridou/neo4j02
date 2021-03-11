@@ -47,6 +47,8 @@ $(document).ready(function(){
          $('#result4').parent().removeClass("grid-item result4GridItem") ;
           $("#result4").empty();
            $("#result3").empty();
+            $("#theTable").empty();
+            $("#theTable2").empty();
            localStorage.setItem("currentNode", '');
            localStorage.setItem("currentProperty", '');
            localStorage.setItem("currentRelationshipType", '');
@@ -81,6 +83,8 @@ $(document).ready(function(){
         $("#result2").empty();
         $("#result3").empty();
         $("#result4").empty();
+        $("#theTable").empty();
+        $("#theTable2").empty();
         $('#mainList').val('none');
         localStorage.setItem("currentNode", '');
         localStorage.setItem("currentProperty", '');
@@ -334,6 +338,9 @@ function keywordMapHandling(keywordMap){
          $('#result4').parent().removeClass("grid-item result4GridItem") ;
           $("#result4").empty();
            $("#result3").empty();
+           $("#theTable").empty();
+           $("#theTable2").empty();
+           $('#mainList').val('none');
 
          console.log("inside the Map handling: ", keywordMap);
          //create flag objects for any keyword case {exists, keys array, counter}
@@ -462,13 +469,31 @@ function keywordMapHandling(keywordMap){
                        }
                  }else {
                       console.log('add more cases');
+
                  }
 
-     if($('#result').children().length){
-             $('#result').parent().addClass("grid-item resultGridItem")
-     }else{
-            $('#result').parent().removeClass("grid-item result4GridItem") ;
-     }
+//set css accordingly
+        $(document).ajaxStop(function () {
+
+             if($('#result').children().length){
+                     $('#result').parent().addClass("grid-item resultGridItem")
+             }else{
+                    $('#result').parent().removeClass("grid-item result4GridItem") ;
+             }
+
+             if($('#result2').children().length){
+                     $('#result2').parent().addClass("grid-item resultGridItem")
+             }else{
+                    $('#result2').parent().removeClass("grid-item result4GridItem") ;
+             }
+
+              if($('#result4').children().length){
+                      $('#result4').parent().addClass("grid-item resultGridItem")
+              }else{
+                     $('#result4').parent().removeClass("grid-item result4GridItem") ;
+              }
+
+        });
 
 }//function ends
 

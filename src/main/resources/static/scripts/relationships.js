@@ -76,6 +76,7 @@ function countRel(rel){
                 console.log("relativeNodes running");
             $(this).siblings().removeClass("buttonpressed") ;
             $(this).addClass("buttonpressed") ;
+            $('#result4').parent().addClass("grid-item result4GridItem") ;
        //        $("#result").empty();
                $("#result4").empty();
                  $( ".selectLabel" ).remove();
@@ -268,6 +269,7 @@ function  ajaxAllrelpropertiesOf(rel) {
 
                              items.push( "<button class='showrelproperties'" + JSON.stringify(key) + "'>" + val.value + "</button>" );
                            });
+
 
                            $( "<div/>", {
                              "class": "my-new-list",

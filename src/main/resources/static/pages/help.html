@@ -10,7 +10,69 @@
     <body>
     <h1> Help Page  </h1>
     
+<pre>
+   <h1> Get started with Neo4j database exploration </h1>
 
+<u>example:</u>
+Considering the following relationship let's define the fundamental parts of Neo4j Graph DB:
+
+<b> (AUTHOR{name})-[WROTE{location}]->(BOOK{title}) </b>
+
+       - node label: AUTHOR, BOOK
+       - relationship type: WROTE
+       - node property name: name, title
+       - relationship property name: location
+
+    <h3>"Visualize Schema" button </h3>
+    Get a general visualized idea of your DB structure by pressing the "Visualize Schema" button
+
+    <h3>"Refresh" button </h3>
+    Refresh the entire page
+
+    <h3>"Import Schema" button  (Disabled) </h3>
+    Use this button to send the ajax request that executes the @Query of importSchema() method
+    that is included in Neo4jRepository's extended class
+
+
+    <h3>Drop down list </h3>
+    - Select your preferred option to start among the
+    basic pillars of a neo4j DB structure.
+    - the dynamic buttons will lead you step by step to
+    your next point of interest
+
+    <h3>Search input </h3>
+    - Use single or combined keywords to reach out the information you need
+    - Check the following section to use the search input function for <b>combined keywords</b> efficiently
+
+    <b>KEYWORD COMBINATION CASES</b>
+
+    List of valid search input combined keywords:
+<ul>
+    <li>{node label} {property name} {node property value}</li>
+    <li>{property name} {{node property value}</li>
+    <li>{node label} {{node property name}</li>
+    <li>{node label} {relatiosnhip type}</li>
+    <li>{node label} {node property value}</li>
+    <li>{node label} {node property value} {node property value}</li>
+    <li>{node label} nodes</li>
+    <li>{node label} properties</li>
+    <li>{node label} relationships</li>
+    <li>{relatiosnhip type} properties</li>
+    <li>{relatiosnhip type} {relatiosnhip property name} {relationship property value}</li>
+    <li>{relatiosnhip property name} {relationship property value}</li>
+    <li>{relatiosnhip type} {relatiosnhip property name}</li>
+    <li>{relatiosnhip type} {relationship property value}</li>
+    <li>{node property value} {node property value}</li>
+    <li>{node label} [...] {node label}</li>
+</ul>
+    In case the keyword is consisted of two or more words you
+    can wrap it with single quotes ('...') in order
+    to let the system consider it as an undivided keyword
+
+ex.  '{any keyword}' {relatiosnhip type}
+
+
+</pre>
 
         
     </body>

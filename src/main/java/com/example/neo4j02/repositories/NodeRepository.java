@@ -16,12 +16,14 @@ public interface NodeRepository<T> extends Neo4jRepository<T, Long> {
 
 //---------IMPORT SCHEMA------------------------------------------------------------
 
-    @Query("LOAD CSV WITH HEADERS FROM \"file:///books.csv\" AS Line\n" +
-            "MERGE (b:Book {title: Line.title, year: toInteger(Line.year)  , price: Line.price})" +
-            "MERGE (e:Editor {publisher: Line.edition })\n" +
-            "MERGE (a:Author {writer: Line.author})\n"+
-            "MERGE (a)-[:WROTE]->(b)\n" +
-            "merge (e)-[:PUBLISHED]->(b)" )
+
+
+  @Query("LOAD CSV WITH HEADERS FROM \"file:///books.csv\" AS Line\n" +
+          "MERGE (b:Book {title: Line.title, year: toInteger(Line.year)  , price: Line.price})" +
+          "MERGE (e:Editor {publisher: Line.edition })\n" +
+          "MERGE (a:Author {writer: Line.author})\n"+
+          "MERGE (a)-[:WROTE]->(b)\n" +
+          "merge (e)-[:PUBLISHED]->(b)" )
   Collection<EntityNode> importSchema();
 
 //    @Query("LOAD CSV WITH HEADERS FROM 'file:///songs.csv' AS Line\n" +
