@@ -76,16 +76,10 @@ $(document).ready(function(){
 // for AUTOCOMPLETE CHECK https://www.w3schools.com/howto/howto_js_autocomplete.asp
 $(document).ready(function(){
    $("#btn").click(function(){
+       clearResults();
         var keyword = $("#keywordinput").val();
         wordsCounter = countWords(keywordsToArray(keyword));           // keywords inserted
         console.log("wordsCounter ",wordsCounter);
-        $("#result").empty();
-        $("#result2").empty();
-        $("#result3").empty();
-        $("#result4").empty();
-        $("#theTable").empty();
-        $("#theTable2").empty();
-        $('#mainList').val('none');
         localStorage.setItem("currentNode", '');
         localStorage.setItem("currentProperty", '');
 
@@ -911,12 +905,7 @@ function ajaxForRelValue(rel,value){
 
 
 function clearResults(){
-    $("#result").empty();
-    $('#result2').parent().removeClass("grid-item result2GridItem") ;
-    $("#result2").empty();
-    $('#result4').parent().removeClass("grid-item result4GridItem") ;
-    $("#result4").empty();
-    $("#result3").empty();
-
-
+      $(".box2").nextAll().empty();
+      $('#mainList').val('none');
+    console.log("clearResults() completed")
 }

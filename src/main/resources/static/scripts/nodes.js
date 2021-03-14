@@ -11,6 +11,7 @@
         localStorage.setItem("currentNode", node);
        $("#result2").empty();
        $("#result3").empty();
+       $("#result3").children().remove();
        $('#result4').parent().removeClass("grid-item result4GridItem") ;
        $("#result4").empty();
        $("#theTable").empty();
@@ -137,15 +138,15 @@ $(document).ready(function(){
                                console.log("before-----------",JSON.stringify(val.value));
                                var valueF = {};
                                 valueF.id = val.value.id;
+                                 valueF.theOtherNode = val.value.labels;
                                 for (let i = 0; i < propertiesArray.length; ++i){
                                    console.log('proparr',propertiesArray[i])
                                     console.log('key value',propertiesArray[i].key, propertiesArray[i].value)
                                    valueF[propertiesArray[i].key] = propertiesArray[i].value;
-
                                 }
 
                                console.log("value fixed------",valueF );
-                               valueFinal= JSON.stringify(valueF).replace("value\":", "").replace(/[&\/\\#+()$~%'"*?<>{}]/g, '');;
+                               valueFinal= JSON.stringify(valueF).replace("value\":", "").replace(/[&\/\\#+()$~%'"*?<>{}]/g, '');
 
                            }else{
                                 valueFinal = JSON.stringify(val).replace("value\":", "").replace(/[&\/\\#+()$~%'"*?<>{}]/g, '');

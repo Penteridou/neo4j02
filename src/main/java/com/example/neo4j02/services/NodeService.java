@@ -55,7 +55,7 @@ public class NodeService extends GenericService<Object> {
         node = node.substring(0, 1).toUpperCase() + node.substring(1);
         Map<String,Object> params = new HashMap<>();
         System.out.println("getNodeAll function for node:  "+node);
-        String query="MATCH (n:"+ node + ") RETURN n as value LIMIT 5";
+        String query="MATCH (n:"+ node + ") RETURN n as value LIMIT 15";
         return Neo4jSessionFactory.getInstance().getNeo4jSession().query(query,params);
     }
 
@@ -110,7 +110,7 @@ public class NodeService extends GenericService<Object> {
     public Result getRelAll(String rel){
         Map<String,Object> params = new HashMap<>();
         rel = rel.toUpperCase();
-        String query="MATCH (a)-[r:"+rel+"]->(b) RETURN a, type(r), b LIMIT 4";
+        String query="MATCH (a)-[r:"+rel+"]->(b) RETURN a, type(r), b LIMIT 15";
         return Neo4jSessionFactory.getInstance().getNeo4jSession().query(query,params);
     }
 
@@ -172,7 +172,7 @@ public class NodeService extends GenericService<Object> {
     public Result getPropAll(String prop){
         Map<String,Object> params = new HashMap<>();
         prop= prop.toLowerCase();
-        String query="MATCH (n) WHERE EXISTS(n."+prop+") RETURN DISTINCT  n."+prop+"  ,labels(n) as entity LIMIT 4";
+        String query="MATCH (n) WHERE EXISTS(n."+prop+") RETURN DISTINCT  n."+prop+"  ,labels(n) as entity LIMIT 15";
         return Neo4jSessionFactory.getInstance().getNeo4jSession().query(query,params);
     }
 
@@ -181,7 +181,7 @@ public class NodeService extends GenericService<Object> {
         System.out.println("property of a node: "+prop+" "+node);
         Map<String,Object> params = new HashMap<>();
         node = node.substring(0, 1).toUpperCase() + node.substring(1);
-        String query="MATCH (n:"+node+") WHERE EXISTS(n."+prop+") RETURN DISTINCT  n."+prop+" as value LIMIT 4";
+        String query="MATCH (n:"+node+") WHERE EXISTS(n."+prop+") RETURN DISTINCT  n."+prop+" as value LIMIT 15";
         return Neo4jSessionFactory.getInstance().getNeo4jSession().query(query,params);
     }
 
@@ -277,8 +277,8 @@ public class NodeService extends GenericService<Object> {
         rel = rel.toUpperCase();
         prop = prop.toLowerCase();
         String query;
-        query="MATCH ()-[r:"+rel+" ]-()  WHERE r." + prop + "  =~ '(?i).*"+value+".*'"+
-                "return distinct type(r) as relType , r." + prop + " as " + prop + "";
+        query="MATCH (a)-[r:"+rel+" ]->(b)  WHERE r." + prop + "  =~ '(?i).*"+value+".*'"+
+                "return distinct labels(startNode(r)) as starter_node,type(r),labels(endNode(r)) as endNode , a as starter_node_info,  b as end_node_info, r." + prop + " as " + prop + "";
 
         return Neo4jSessionFactory.getInstance().getNeo4jSession().query(query,params);
     }
