@@ -25,10 +25,23 @@ $(document).ready(function(){
 
 $(document).ready(function(){
    $("#import").click(function(){
-   alert("import");
+   alert("data imported");
           $.ajax({
               type: 'GET',
               url: 'http://localhost:8080/importschema',
+              dataType : "json",
+              contentType:"application/json",
+              success: function(data){}
+          });
+    });
+});
+
+$(document).ready(function(){
+   $("#deleteAll").click(function(){
+   alert("data deleted");
+          $.ajax({
+              type: 'GET',
+              url: 'http://localhost:8080/deleteschema',
               dataType : "json",
               contentType:"application/json",
               success: function(data){}

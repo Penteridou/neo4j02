@@ -17,5 +17,10 @@ public class SchemaImportService {
 
     }
 
+    public void deleteSchema(){
+        nodeRepository.deleteSchema();
+
+    }
+
 
 }

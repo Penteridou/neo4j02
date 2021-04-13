@@ -17,8 +17,11 @@ public interface NodeRepository<T> extends Neo4jRepository<T, Long> {
 //---------IMPORT SCHEMA------------------------------------------------------------
 
 
+    @Query("MATCH (n) DETACH DELETE n")
+    Collection<EntityNode> deleteSchema();
 
-  @Query("CREATE (TheMatrix:Movie {title:'The Matrix', released:1999, tagline:'Welcome to the Real World'})\n" +
+  @Query(
+          "CREATE (TheMatrix:Movie {title:'The Matrix', released:1999, tagline:'Welcome to the Real World'})\n" +
           "CREATE (Keanu:Person {name:'Keanu Reeves', born:1964})\n" +
           "CREATE (Carrie:Person {name:'Carrie-Anne Moss', born:1967})\n" +
           "CREATE (Laurence:Person {name:'Laurence Fishburne', born:1961})\n" +
@@ -524,6 +527,7 @@ public interface NodeRepository<T> extends Neo4jRepository<T, Long> {
           "(JamesThompson)-[:REVIEWED {summary:'Fun, but a little far fetched', rating:65}]->(TheDaVinciCode),\n" +
           "(JessicaThompson)-[:REVIEWED {summary:'You had me at Jerry', rating:92}]->(JerryMaguire)\n" )
   Collection<EntityNode> importSchema();
+
 
 //  @Query("LOAD CSV WITH HEADERS FROM \"file:///books.csv\" AS Line\n" +
 //          "MERGE (b:Book {title: Line.title, year: toInteger(Line.year)  , price: Line.price})" +

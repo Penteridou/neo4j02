@@ -1,7 +1,6 @@
 package com.example.neo4j02.services;
 
 import com.example.neo4j02.Neo4jSessionFactory;
-import com.example.neo4j02.nodes.Book;
 import com.example.neo4j02.repositories.NodeRepository;
 import org.neo4j.ogm.model.Result;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -199,7 +198,7 @@ public class NodeService extends GenericService<Object> {
         System.out.println("value of property of a nodeLabel: "+prop+" "+value);
         Map<String,Object> params = new HashMap<>();
         String query;
-        query="MATCH (n)  WHERE n." + prop + "  =~ '(?i).*" + value + ".*'\n" +
+        query="MATCH (n)  WHERE toLower(n." + prop + ")  =~ '(?i).*" + value + ".*'\n" +
                 "return n as info,labels(n) as Nodelabel";
 
         return Neo4jSessionFactory.getInstance().getNeo4jSession().query(query,params);

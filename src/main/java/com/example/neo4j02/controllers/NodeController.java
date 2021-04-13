@@ -44,6 +44,12 @@ public class NodeController<T> { // GenericController
         schemaImportService.importSchema();
         return "Schema Imported";
     }
+
+    @GetMapping("/deleteschema")
+    public String deleteschema() {
+        schemaImportService.deleteSchema();
+        return "Schema Deleted";
+    }
     //-----------------get node by Id-----------------------------------------------------------------------------------------
 
     @GetMapping("/getNodeByIdT/{id}")
